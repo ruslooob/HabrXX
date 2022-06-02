@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание пользователя</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header}"></div>
+<main class="auth-main container-1100">
+    <div class="auth-form__wrapper">
+        <h1 class="auth-main__header">Создание <br> пользователя</h1>
+        <form class="auth-form" th:action="@{/admin/users/}" th:object="${user}" method="post">
+            <input type="text" th:field="*{fullName}" placeholder="ФИО"/>
+            <input type="text" th:field="*{login}" placeholder="Логин"/>
+            <input type="text" th:field="*{email}" placeholder="Электронная почта"/>
+            <input type="password" th:field="*{password}" placeholder="Пароль"/>
+            <label for="admin-checkbox">Администратор
+                <input type="checkbox" name="isAdmin" id="admin-checkbox"/>
+            </label>
+            <input type="submit" value="Создать"/>
+        </form>
+    </div>
+</main>
+</body>
+</html>

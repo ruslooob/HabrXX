@@ -1,0 +1,10 @@
+/*todo во всех админках повторяются стили для таблиц, придумать для них один класс */
+.admin-users {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1 1 auto;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}

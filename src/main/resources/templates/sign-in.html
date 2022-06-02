@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>ХабрХХ Вход</title>
+</head>
+<body>
+<!-- todo сделать валидацию на клиенте-->
+<!-- todo сделать повторение пароля на клиенте-->
+<div th:replace="~{fragments/header}"></div>
+<div class="auth-main container-1100">
+    <div class="auth-form__wrapper">
+        <h1 class="auth-main__header">Вход</h1>
+        <form class="auth-form" th:action="@{/sign-in}" th:object="${user}" method="post">
+            <div class="form-group">
+                <input class="form-group" type="text" th:field="*{login}" minlength="3" maxlength="20" placeholder="Логин" required/>
+                <!--                <div class="alert-warning" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>-->
+            </div>
+            <div class="form-group">
+                <input class="form-group" type="password" th:field="*{password}" minlength="5" maxlength="100" placeholder="Пароль" required/>
+                <!--                <div class="alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+            </div>
+            <a th:href="@{/sign-up}">Еще не зарегистрированы?</a>
+            <input type="submit" value="Войти"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

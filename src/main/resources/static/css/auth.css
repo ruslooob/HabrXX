@@ -1,0 +1,34 @@
+.auth-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /*fixme убрать, когда сделаю наследования компонентов от базового*/
+    height: 100vh;
+}
+
+.auth-form__wrapper {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.auth-main__header {
+    text-align: center;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+}
+
+.auth-form input {
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    outline: none;
+    background-color: #e8f0fe;
+}

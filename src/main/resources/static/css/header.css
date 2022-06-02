@@ -1,0 +1,56 @@
+.header__wrapper {
+    position: sticky;
+    top: 0;
+    /*margin-top: -12px!important;*/
+    z-index: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+a.header__logo {
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black!important;
+    margin-right: 40px;
+}
+
+/*todo назвать навы*/
+nav {
+    padding: 10px;
+}
+
+nav:hover {
+    background-color: rgba(178, 190, 195, 0.4);
+}
+
+.header__genres {
+    display: flex;
+    gap: 30px;
+    margin-right: auto;
+}
+
+.header__right-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.header__wrapper {
+    background-color: white;
+}
+
+.header__sign-in img {
+    width: 20px;
+    height: 23px;
+}
+
+.header__logout img {
+    width: 20px;
+    height: 20px;
+}

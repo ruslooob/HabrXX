@@ -1,0 +1,31 @@
+table {
+    /*border: 1px solid black;*/
+}
+
+th {
+    /*border: 1px solid grey;*/
+    text-align: center;
+}
+
+td.publication__author-login {
+    text-align: center;
+}
+
+td {
+    /*border: 1px solid grey;*/
+    padding: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: #dfe6e9;
+}
+
+
+.admin-publications__main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+}

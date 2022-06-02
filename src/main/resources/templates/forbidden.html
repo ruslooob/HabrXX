@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Нарушение доступа</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="forbidden container-900">
+        <h1>Forbidden 403</h1>
+        <h2>Похоже, что вы пытались попасть туда, куда не следует</h2>
+        <hr>
+        <!--<img src="../static/img/chmonya.jpg" th:src="@{../static/img/chmonya.jpg}" alt="" width="200" style="object-fit: cover">-->
+        <h2>Текст ошибки:</h2>
+        <h2 th:text="${forbiddenMessage}"></h2>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Админка комментариев</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let deleteCommentBtns = document.querySelectorAll(".admin-comment__delete-comment-btn");
+            for (let btn of deleteCommentBtns) {
+                btn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    let commentId = e.target.parentElement.parentElement.getElementsByClassName(`comment-id`)[0].textContent;
+                    console.log(`/admin/comments/${commentId}`)
+                    fetch(`/admin/comments/${commentId}`, {
+                        method: 'DELETE'
+                    })
+                    window.location = "/admin/comments"
+                });
+            }
+        })
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="admin-comments container-1100">
+        <table>
+            <thead>
+            <tr>
+                <th>Логин автора</th>
+                <th>Содержание</th>
+                <th>Дата публикации</th>
+                <th>Карма</th>
+                <th>Название Публикации</th>
+                <th>Действие</th>
+            </tr>
+            </thead><!-- todo в админке можно будет только удалять комментарии-->
+            <tbody>
+            <tr class="admin-comment" th:each="comment: ${comments}">
+                <td class="comment-id" th:text="${comment.id}" style="display: none"></td>
+                <td th:text="${comment.user.login}"></td>
+                <td th:text="${comment.content}"></td>
+                <td th:text="${#temporals.format(comment.dateTime, 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:text="${comment.karma}"></td>
+                <td class="admin-comment__publication-header" th:text="${comment.publicationHeader}"></td>
+                <td>
+                    <a href="#" class="admin-comment__delete-comment-btn btn"
+                       th:id="${'deleteCommentBtn' + comment.id}">Удалить</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

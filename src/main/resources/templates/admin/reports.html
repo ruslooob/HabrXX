@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчеты</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        function getReport(baseUrl) {
+            let reportFormat = document.getElementById('reportFormat').value
+            // fetch(`${baseUrl}?reportFormat=${reportFormat}`);
+            /* todo разобраться, почему не работает мб даже задать вопрос на SO */
+            window.location = `${baseUrl}?reportFormat=${reportFormat}`;
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="reports-main container-1100">
+        <div class="report-format-checkbox">
+            <label for="reportFormat">Формат отчета:</label>
+            <select name="reportFormat" id="reportFormat">
+                <option value="pdf">pdf</option>
+                <option value="html">html</option>
+                <option value="csv">csv</option>
+            </select>
+        </div>
+        <div class="cards">
+            <!-- todo подумать над тем, чтобы вынести /admin/reports/ в функцию-->
+            <span class="card"
+               th:onclick="|getReport('/admin/reports/best-publications')|"
+            >Лучшие публикации</span>
+            <span class="card" th:onclick="|getReport('/admin/reports/best-authors')|">Лучшие авторы</span>
+        </div>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

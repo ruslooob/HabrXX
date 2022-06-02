@@ -1,0 +1,33 @@
+.create-form__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1 1 auto;
+}
+
+input.form-create-publication__header {
+    width: 800px;
+    /*outline: none;*/
+}
+
+.publication__content {
+    width: 800px;
+    height: 400px;
+    /*outline: none;*/
+}
+
+.form-create-publication {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.create-form__header {
+    margin-top: 10px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}

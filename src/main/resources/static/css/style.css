@@ -1,0 +1,92 @@
+@import url("reset.css");
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=PT+Serif:ital@1&display=swap');
+/*todo разделить это по файлам*/
+@import "header.css";
+@import "auth.css";
+@import "publications.css";
+@import "create-publication-form.css";
+@import "publication-details.css";
+@import "footer.css";
+@import "admin-publications.css";
+@import "update-publication-form.css";
+@import "admin-comments.css";
+@import "admin-home.css";
+@import "admin-users.css";
+@import "admin-user-form.css";
+@import "forbidden.css";
+@import "reports.css";
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: #dfe6e9;
+    height: 100%;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.container-900 {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.container-1100 {
+    width: 1100px;
+    margin: 0 auto;
+}
+
+.container-fluid {
+    width: 100%;
+    margin: 0 auto;
+}
+
+button {
+    padding: 3px;
+    border-radius: 5px;
+    border: 0;
+    background-color: #74b9ff;
+    color: #dfe6e9;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+}
+
+button:hover {
+    background-color: rgba(116, 185, 255, 0.9);
+}
+
+img {
+    object-fit: cover;
+    border-radius: 5px;
+    width: 95%;
+}
+
+a,
+a:visited {
+    color: #0984e3;
+}
+
+a.btn {
+    text-decoration: none;
+}
+
+a.btn:hover {
+    color: white;
+    background-color: #0984e3;
+}
+
+.btn {
+    padding: 5px;
+    border: 1px solid blue;
+}
+

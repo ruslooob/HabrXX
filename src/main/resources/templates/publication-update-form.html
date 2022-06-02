@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Publication</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="update-publications-form container-900">
+        <h1>Измение публикации</h1>
+        <form th:action="@{/publications/{id}(id=${updatedPublication.id})}" th:object="${updatedPublication}" th:method="put">
+            <div class="form-update-publication__header__wrapper">
+                <label>Заголовок</label><br>
+                <input class="form-update-publication__header" type="text" th:field="*{header}"/>
+            </div>
+            <div class="form-update-publication__content">
+                <label>Содержимое</label><br>
+                <textarea class="publication__content" type="text" th:field="*{content}"></textarea>
+            </div>
+            <div class="form-update-publication__genres">
+                <label class="form-group" th:text="${'Жанры: '+ updatedPublication.genres}"></label><br><!-- todo показать существующие жанры-->
+                <select th:field="*{genreIds}" multiple>
+                    <option th:each="genre : ${genres}"
+                            th:value="${genre.id}"
+                            th:text="${genre.name}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-update-publication__tags"><!-- todo показать существующие тэги-->
+                <label class="form-group" th:text="${'Тэги: ' + updatedPublication.tags}"></label><br>
+                <select th:field="*{tagIds}" multiple>
+                    <option th:each="tag : ${tags}"
+                            th:value="${tag.id}"
+                            th:text="${tag.name}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-update-publication__submit-wrapper">
+                <input type="submit" value="Написать"/>
+            </div>
+        </form>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

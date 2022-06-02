@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Написание публикации</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <div class="create-form__wrapper container-1100">
+        <h1 class="create-form__header">Создание публикации</h1>
+        <form class="form-create-publication" th:action="@{/publications}" th:object="${publication}" enctype="multipart/form-data" method="post">
+            <div class="form-create-publication__header__wrapper">
+                <label>Заголовок</label><br>
+                <input class="form-create-publication__header" type="text" th:field="*{header}"/>
+            </div>
+            <div class="form-create-publication__file">
+                <label>Главное изображение</label><br>
+                <input name="file" type="file" value="Выберите изображение">
+            </div>
+            <div class="form-create-publication__content">
+                <label>Содержимое</label><br>
+                <textarea class="publication__content" type="text" th:field="*{content}"></textarea>
+            </div>
+            <div class="form-create-publication__genres">
+                <label class="form-group">Жанры</label><br>
+                <select th:field="*{genreIds}" multiple>
+                    <option th:each="genre : ${genres}"
+                            th:value="${genre.id}"
+                            th:text="${genre.name}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-create-publication__tags">
+                <label class="form-group">Тэги</label><br>
+                <select th:field="*{tagIds}" multiple>
+                    <option th:each="tag : ${tags}"
+                            th:value="${tag.id}"
+                            th:text="${tag.name}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-create-publication__submit-wrapper">
+                <input type="submit" value="Написать"/>
+            </div>
+        </form>
+    </div>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

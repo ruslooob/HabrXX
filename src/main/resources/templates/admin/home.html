@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Админка</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="admin-home">
+        <a class="publication-admin-card card" th:href="@{/admin/publications}">
+            Публикации
+        </a>
+        <a class="comments-admin-card card" th:href="@{/admin/comments}">
+            Комментарии
+        </a>
+        <a class="users-admin-card card" th:href="@{/admin/users}">
+            Пользователи
+        </a>
+        <a class="reports-admin-card card" th:href="@{/admin/reports}">
+            Отчеты
+        </a>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+
+</body>
+</html>

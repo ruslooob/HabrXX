@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Smooch&display=swap');
+
+.footer {
+    margin-top: 10px;
+    text-align: center;
+    background-color: white;
+}
+
+.footer__author {
+    font-family: 'Smooch', cursive;
+    font-size: 40px;
+}

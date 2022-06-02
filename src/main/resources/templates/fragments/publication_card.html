@@ -1,0 +1,31 @@
+<!--todo сделать перед именем пользователя иконку-->
+<!--todo сделать перед кол-вом просмотров, комментарии, лайки иконку, кол-во комментариев-->
+<div class="publication" th:fragment="publication_card(content)">
+    <div class="publication__top">
+        <div class="publication__author" th:text="${content.getUser().getLogin()}"></div>
+        <div class="publication__time" th:text="${content.getPublishDateTime()}"></div>
+    </div>
+    <div class="publication__header" th:text="${content.getHeader()}"></div>
+    <div class="publication__tags">
+                <span class="publication__tag" th:each="tag: ${content.getTags()}"
+                      th:text="${tag.getName()}"></span>
+    </div>
+    <div class="publication__img">It's a image</div>
+    <a class="publication__read-more-btn" th:href="@{/publications/{id}/(id=${content.id})}">Читать
+        дальше</a>
+    <div class="publication__attributes">
+        <div class="publication__karma">
+            <img class="publication__karma-icon" src="svg/karma-solid.svg">
+            <div class="publication__karma-text" th:text="${content.karma}"></div>
+
+        </div>
+        <div class="publication__views-count">
+            <img class="publication__views-count-icon" src="svg/views-count-solid.svg">
+            <div class="publication__views-count-text" th:text="${content.viewsCount}"></div>
+        </div>
+        <div class="publication__comments-count">
+            <img class="publication__comments-count-icon" src="svg/comments-count-solid.svg">
+            <div class="publication__comments-count-text" th:text="${content.comments.size()}"></div>
+        </div>
+    </div>
+</div>

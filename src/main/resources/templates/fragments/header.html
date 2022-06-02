@@ -1,0 +1,27 @@
+<!--todo сделать, чтобы тематики вели на динамический урл (не критично)-->
+<div th:fragment="header" class="header__wrapper container-fluid">
+    <header class="header container-1100">
+        <a th:href="@{/}" class="header__logo">HabrXX</a>
+        <div class="header__genres">
+            <nav><a th:href="@{/publications}">Все</a></nav>
+            <nav><a th:href="@{/publications?genreId=1}">Наука</a></nav>
+            <nav><a th:href="@{/publications?genreId=3}">Технологии</a></nav>
+            <nav><a th:href="@{/publications?genreId=2}">Научпоп</a></nav>
+            <nav><a th:href="@{/publications?genreId=6}">Политика</a></nav>
+            <nav th:if="${session.isAdmin} != null"><a th:href="@{/admin}">Админка</a></nav>
+        </div>
+        <div class="header__right-buttons">
+            <a class="publications__create-publications-btn btn" th:if="${session.userId != null}"
+               th:href="@{/publications/add}">Написать</a>
+            <a th:if="${session.userId == null}" class="header__sign-in btn" th:href="@{/sign-in}">
+                <!--todo изменить иконку входа-->
+                <!--todo сделать функционал выхода из учетной записи-->
+                <!--todo сделать функцию когда пользователь зашел, чтобы наверху был его логин-->
+                <!--                <img src="svg/auth-solid.svg" alt=""/>-->Войти
+            </a>
+            <a th:unless="${session.userId == null}" class="header__logout btn" th:href="@{/logout}">
+                <!--                <img src="svg/logout-solid.svg" alt="">-->Выйти
+            </a>
+        </div>
+    </header>
+</div>

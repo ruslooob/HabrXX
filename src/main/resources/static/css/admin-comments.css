@@ -1,0 +1,26 @@
+.admin-comments {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    flex: 1 1 auto;
+}
+
+tr.admin-comment > td {
+    padding: 10px;
+}
+
+.admin-comment__publication-header {
+    text-align: center;
+}
+
+span.admin-users__delete-user-btn {
+    cursor: pointer;
+    color: red;
+    border-color: red;
+}
+
+span.admin-users__delete-user-btn:hover {
+    color: white;
+    border-color: white;
+    background-color: red;
+}

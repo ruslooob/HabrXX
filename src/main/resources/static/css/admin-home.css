@@ -1,0 +1,52 @@
+.admin-home {
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    display: flex;
+    padding: 50px;
+    align-items: center;
+    border-radius: 20px;
+    justify-content: center;
+    gap: 20px;
+    background-color: white;
+}
+
+.card {
+    width: 400px;
+    color: white !important;
+    text-decoration: none;
+    font-size: 30px;
+    padding: 100px;
+    border-radius: 20px;
+    transition: .3s linear all;
+    text-align: center;
+    background-color: #a29bfe;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+a.publication-admin-card {
+    background-color: #6c5ce7;
+}
+
+a.comments-admin-card {
+    background-color: #a29bfe;
+}
+
+a.users-admin-card {
+    background-color: #0984e3;
+}
+
+a.reports-admin-card {
+    background-color: #74b9ff;
+}
+
+a.publication-admin-card:hover,
+a.comments-admin-card:hover,
+a.users-admin-card:hover,
+a.reports-admin-card:hover {
+    transform: scale(1.02);
+}
+

@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/habr
+    username: ruslooob
+    password: titan
+
+
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+
+  web:
+    resources:
+      cache:
+        period: 0
+
+  servlet:
+    multipart:
+      max-file-size: '1000KB'
+      max-request-size: '1000KB'
+
+server:
+  port: 8080

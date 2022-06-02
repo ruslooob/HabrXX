@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Админка Пользователей</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        /* todo показывать предупреждение, если пользователь хочет удалить админа*/
+        function deleteUser(userId) {
+            fetch(`/admin/users/${userId}`, {
+                method: 'DELETE'
+            })
+            window.location = "/admin/users"
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="admin-users container-1100">
+        <div class="admin-users__creat-user-btn-wrapper">
+            <a th:href="@{/admin/users/create-form}" class="admin-users__creat-user-btn btn">Создать пользователя</a>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Почта</th>
+                <th>Логин</th>
+                <th>Карма</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="admin-user" th:each="user: ${users}">
+                <td th:text="${user.fullName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.login}"></td>
+                <td th:text="${user.karma}"></td>
+                <td>
+                    <span class="admin-users__delete-user-btn btn"
+                          th:onclick="|deleteUser('${user.id}')|">Удалить</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

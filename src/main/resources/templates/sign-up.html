@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ХабрХХ Регистрация</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/header}"></div>
+<main class="auth-main container-1100">
+    <div class="auth-form__wrapper">
+        <h1 class="auth-main__header">Регистрация</h1>
+        <form class="auth-form" th:action="@{/sign-up}" th:object="${user}" method="post">
+            <input type="text" th:field="*{fullName}" placeholder="ФИО"/>
+            <input type="text" th:field="*{login}" placeholder="Логин"/>
+            <input type="text" th:field="*{email}" placeholder="Электронная почта"/>
+            <input type="password" th:field="*{password}" placeholder="Пароль"/>
+            <input type="submit" value="Зарегистрироваться"/>
+        </form>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${publication.header}"></title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        function deletePublication(publicationId) {
+            fetch(`/publications/${publicationId}`, {
+                method: 'DELETE'
+            })
+            window.location = "/"
+        }
+
+        function addLike() {
+            let publicationId = document.getElementById("publicationId").textContent
+            fetch(`/publications/${publicationId}/likes`, {method: 'POST'})
+            window.location.reload()
+        }
+    </script>
+    <link rel="stylesheet" href="/css/prism.css">
+    <script src="/js/prism.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <div class="publication_details container-900">
+        <div class="main-center" style="width: 600px;">
+            <div class="publication__first-row">
+                <span th:text="${publication.author.login}"></span>
+                <span th:text="${#temporals.format(publication.publishDateTime, 'dd-MM-yyyy HH:mm')}"></span>
+                <div th:if="${isCanModify}" class="publication__mutate-buttons">
+                    <a class="edit-publication-btn btn"
+                       th:href="@{/publications/update(id=${publication.id})}">Изменить</a>
+                    <span class="delete-publication-btn btn"
+                          th:onclick="|deletePublication('${publication.id}')|">Удалить</span>
+                </div>
+            </div>
+            <h2 th:text="${publication.getHeader()}"></h2>
+            <!--    todo сделать красиво-->
+            <h4 th:text="${'Жанры: ' + publication.getGenres()}"></h4>
+            <div class="publication__preview-image-wrapper">
+                <img class="publication__preview-image" th:src="@{'/uploads/' + ${publication.previewImagePath}}"
+                     alt="">
+            </div>
+            <div th:utext="${htmlContent}"></div>
+            <!--    todo сделать красиво-->
+            <h4 th:text="${'Тэги: ' + publication.getTags()}"></h4>
+            <div class="publication__attributes">
+                <div class="publication__karma publication__attribute">
+                    <a th:if="${session.userId != null}" style="cursor:pointer;"><img src="/svg/karma-solid.svg" alt=""
+                                                                                      class="add-karma"
+                                                                                      onclick="addLike()"></a>
+                    <img th:unless="${session.userId != null}" class="publication__karma-icon"
+                         th:src="@{/svg/karma-solid.svg}" alt="">
+                    <div class="publication__karma-text" th:text="${publication.karma}"></div>
+                </div>
+                <div class="publication__views-count publication__attribute">
+                    <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}" alt="">
+                    <div class="publication__views-count-text" th:text="${publication.viewsCount}"></div>
+                </div>
+                <div class="publication__comments-count publication__attribute">
+                    <img class="publication__comments-count-icon" th:src="@{/svg/comments-count-solid.svg}">
+                    <div class="publication__comments-count-text" th:text="${comments.size()}"></div>
+                </div>
+            </div>
+            <form th:if="${session.userId != null}"
+                  th:action="@{/publications/{publicationId}/comments(publicationId=${publication.id})}"
+                  th:object="${newComment}"
+                  method="post">
+                <input class="form-group" type="text" th:placeholder="Комментарий" th:field="*{content}"
+                       style="outline: none;"/>
+                <input type="submit" value="Отправить"/>
+            </form>
+            <ul th:each="comment : ${comments}">
+                <li th:text="${comment.getUser().getLogin() + ' ' + comment.getDateTime()}"></li>
+                <li th:text="${comment.getContent()}" style="list-style-type: none">
+                </li>
+                <!--            <div th:if="${session.userId}==${comment.getUser().getId()}">-->
+                <!--                <form th:action="@{/publications/{publicationId}/comments/{id}(id=${comment.id}, publicationId=${publication.id})}"-->
+                <!--                      th:method="delete">-->
+                <!--                    <button type="submit" class="btn">Удалить</button>-->
+                <!--                </form>-->
+                <!--            </div>-->
+            </ul>
+        </div>
+        <div class="main-left">
+            <h2 class="mini-publications-header">Читают сейчас</h2>
+            <div class="mini-publications">
+                <div class="mini-publication" th:each="miniPublication: ${miniPublications}">
+                    <a class="mini-publication__header" th:href="@{/publications/{id}(id=${miniPublication.id})}"
+                       th:text="${miniPublication.header}"></a>
+                    <div class="mini-publication__attrs">
+                        <div class="publication__attribute">
+                            <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}" alt="">
+                            <span th:text="${miniPublication.viewsCount}"></span>
+                        </div>
+                        <div class="publication__attribute">
+                            <img class="publication__comments-count-icon" th:src="@{/svg/comments-count-solid.svg}"
+                                 alt="">
+                            <span th:text="${miniPublication.commentsCount}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

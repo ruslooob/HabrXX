@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель публикаций</title>
+    <link rel="icon" type="image/ico" th:href="@{/img/favicon.ico}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header}"></div>
+    <main class="admin-publications__main-content container-1100">
+        <h1>Админ-панель публикаций</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Автор</th>
+                <th>Дата публикации</th>
+                <th>Заголовок</th>
+                <th>Жанры</th>
+                <th>Тэги</th>
+            </tr>
+            </thead>
+            <tr th:each="publication: ${publications}">
+                <td class="publication__author-login">
+                    <a th:href="${'/publications/' + publication.id}"
+                       th:text="${publication.author.login}"></a>
+                </td>
+                <td><a th:href="${'/publications/' + publication.id}"
+                       th:text="${#temporals.format(publication.publishDateTime, 'dd-MM-yyyy HH:mm')}"></a>
+                </td>
+                <td>
+                    <a th:href="${'/publications/' + publication.id}"
+                       th:text="${publication.header}"></a>
+                </td>
+                <td><a th:href="${'/publications/' + publication.id}"
+                       th:text="${publication.genres}"></a>
+                </td>
+                <td><a th:href="${'/publications/' + publication.id}"
+                       th:text="${publication.tags}"></a></td>
+            </tr>
+        </table>
+    </main>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</body>
+</html>

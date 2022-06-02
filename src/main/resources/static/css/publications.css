@@ -1,0 +1,161 @@
+/*.publications_header {*/
+/*    margin-bottom: 1rem;*/
+/*}*/
+
+/*.publications__create-publications-btn {
+    margin-bottom: 1rem;
+}*/
+
+.publications__main-content {
+    display: flex;
+    /*flex-direction: column;*/
+    gap: 10px;
+    flex: 1 1 auto;
+}
+
+.main-center {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.publications__header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 600px;
+}
+
+.publications {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.publication {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 600px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.publication__top {
+    display: flex;
+    gap: 20px;
+}
+
+.publication__tags {
+    display: flex;
+    gap: 10px;
+}
+
+.publication__tag {
+    color: gray;
+}
+
+div.publication__header-wrapper a.publication__header {
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+    transition: 0.2s linear color;
+}
+
+div.publication__header-wrapper a.publication__header:hover {
+    color: #74b9ff;
+}
+
+.publication__img-wrapper {
+    display: flex;
+    /*justify-content: center;*/
+}
+
+.publication__img {
+    width: 100%;
+    object-fit: cover;
+    /*border: 1px solid gray;*/
+}
+
+.publication__attributes {
+    height: 30px;
+    display: flex;
+    gap: 30px;
+}
+
+.publication__attribute {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.publication__attribute img {
+    width: 15px;
+    height: 12px;
+    fill: green;
+}
+
+img.publication__karma-icon {
+    position: relative;
+    top: -1px;
+    width: 14px;
+    height: 14px;
+}
+
+img.publication__comments-count-icon {
+    width: 17px;
+    height: 16px;
+}
+
+.paginator {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.main-left {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.mini-publications-header {
+    padding: 14px;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 25px;
+}
+
+
+.mini-publications {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.mini-publication {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+
+}
+
+.mini-publication__header {
+    font-weight: bold;
+    color: black!important;
+    text-decoration: none!important;
+}
+
+.mini-publication__attrs {
+    display: flex;
+    gap: 20px;
+}
