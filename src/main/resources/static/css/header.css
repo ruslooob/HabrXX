@@ -39,7 +39,16 @@ nav:hover {
 .header__right-buttons {
     display: flex;
     gap: 20px;
+    align-items: center;
 }
+
+.header__right-buttons img {
+    filter: invert(85%) sepia(20%) saturate(120%) hue-rotate(152deg) brightness(87%) contrast(88%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
 
 .header__wrapper {
     background-color: white;

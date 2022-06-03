@@ -21,7 +21,9 @@ html {
 }
 
 body {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Georgia', serif;
+    font-size: 17px;
+    line-height: 1.5;
     background-color: #dfe6e9;
     height: 100%;
 }
@@ -90,3 +92,6 @@ a.btn:hover {
     border: 1px solid blue;
 }
 
+code {
+    font-family: 'JetBrains Mono', monospace;
+}

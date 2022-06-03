@@ -11,16 +11,16 @@
             <nav th:if="${session.isAdmin} != null"><a th:href="@{/admin}">Админка</a></nav>
         </div>
         <div class="header__right-buttons">
-            <a class="publications__create-publications-btn btn" th:if="${session.userId != null}"
-               th:href="@{/publications/add}">Написать</a>
-            <a th:if="${session.userId == null}" class="header__sign-in btn" th:href="@{/sign-in}">
-                <!--todo изменить иконку входа-->
-                <!--todo сделать функционал выхода из учетной записи-->
-                <!--todo сделать функцию когда пользователь зашел, чтобы наверху был его логин-->
-                <!--                <img src="svg/auth-solid.svg" alt=""/>-->Войти
+            <a th:href="@{/publications/add}">
+                <img th:if="${session.userId != null}" th:src="@{/svg/pencil-solid.svg}" alt="">
             </a>
-            <a th:unless="${session.userId == null}" class="header__logout btn" th:href="@{/logout}">
-                <!--                <img src="svg/logout-solid.svg" alt="">-->Выйти
+            <a th:if="${session.userId == null}" class="header__sign-in" th:href="@{/sign-in}">
+                <!--todo сделать функцию когда пользователь зашел, чтобы наверху был его логин-->
+                <img th:src="@{svg/auth-solid.svg}" alt=""/>
+            </a>
+            <!--            <a th:unless="${session.userId == null}" class="header__logout btn" th:href="@{/logout}">-->
+            <a th:unless="${session.userId == null}" th:href="@{/logout}">
+                <img th:src="@{/svg/logout-solid.svg}" alt="">
             </a>
         </div>
     </header>

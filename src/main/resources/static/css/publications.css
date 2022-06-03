@@ -95,9 +95,12 @@ div.publication__header-wrapper a.publication__header:hover {
 }
 
 .publication__attribute img {
+    filter: invert(85%) sepia(20%) saturate(120%) hue-rotate(152deg) brightness(87%) contrast(88%);
+}
+
+.publication__attribute img {
     width: 15px;
     height: 12px;
-    fill: green;
 }
 
 img.publication__karma-icon {
