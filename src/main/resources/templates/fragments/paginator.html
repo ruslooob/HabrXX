@@ -1,0 +1,25 @@
+<div class="paginator" th:fragment="paginator(currentPage, pagesCount)">
+    <a th:hidden="${currentPage == 1}"
+       th:href="${'/publications?page=' + (currentPage - 1)}"><</a>
+    <a th:hidden="${pagesCount == 1}"
+       th:text="${currentPage}"
+       th:href="${'/publications?page=' + currentPage}">
+    </a>
+    <a th:hidden="${currentPage + 1 > pagesCount}"
+       th:href="${'/publications?page=' + (currentPage + 1)}"
+       th:text="${currentPage + 1}"></a>
+    <a th:hidden="${currentPage + 2 > pagesCount}"
+       th:href="${'/publications?page=' + (currentPage + 2)}"
+       th:text="currentPage + 2"></a>
+    <span th:hidden="${pagesCount < 5}" href="#">...</span>
+    <a th:hidden="${(pagesCount - 2) <= 2}"
+       th:href="${'/publications?page=' + (pagesCount - 2)}"
+       th:text="${(pagesCount - 2)}"></a>
+    <a th:hidden="${(pagesCount - 1) <= 1}"
+       th:href="${'/publications?page=' + (pagesCount - 1)}"
+       th:text="${(pagesCount - 1)}"></a>
+    <a th:hidden="${currentPage == pagesCount}"
+       th:href="${'/publications?page=' + (currentPage + 1)}">></a>
+</div>
+
+

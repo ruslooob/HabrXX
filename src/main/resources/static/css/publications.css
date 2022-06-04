@@ -117,6 +117,13 @@ img.publication__comments-count-icon {
 .paginator {
     margin-right: auto;
     margin-left: auto;
+    display: flex;
+    gap: 10px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    justify-content: center;
 }
 
 .main-left {
@@ -133,13 +140,11 @@ img.publication__comments-count-icon {
     font-size: 25px;
 }
 
-
 .mini-publications {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-
 
 .mini-publication {
     display: flex;
@@ -148,7 +153,6 @@ img.publication__comments-count-icon {
     padding: 20px;
     background-color: white;
     border-radius: 10px;
-
 }
 
 .mini-publication__header {

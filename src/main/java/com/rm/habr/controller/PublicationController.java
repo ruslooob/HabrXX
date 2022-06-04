@@ -70,8 +70,8 @@ public class PublicationController {
             chosenFilter = "Все";
         }
         model.addAttribute("chosenFilter", chosenFilter);
-//        List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
-//        model.addAttribute("miniPublications", miniPublications);
+        List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
+        model.addAttribute("miniPublications", miniPublications);
         return "publications";
     }
 

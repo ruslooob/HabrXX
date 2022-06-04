@@ -1,4 +1,4 @@
-<div class="publication" th:fragment="publication_card(publication)">
+<div class="publication" th:fragment="publication(publication)">
     <div class="publication__top">
         <a th:href="${'/publications/byUser?userId=' + publication.author.id}"
            class="publication__author" th:text="${publication.author.login}"></a>
