@@ -16,9 +16,8 @@
             </a>
             <a th:if="${session.userId == null}" class="header__sign-in" th:href="@{/sign-in}">
                 <!--todo сделать функцию когда пользователь зашел, чтобы наверху был его логин-->
-                <img th:src="@{svg/auth-solid.svg}" alt=""/>
+                <img th:src="@{/svg/auth-solid.svg}" alt=""/>
             </a>
-            <!--            <a th:unless="${session.userId == null}" class="header__logout btn" th:href="@{/logout}">-->
             <a th:unless="${session.userId == null}" th:href="@{/logout}">
                 <img th:src="@{/svg/logout-solid.svg}" alt="">
             </a>

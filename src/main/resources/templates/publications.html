@@ -15,68 +15,32 @@
             <h1 class="publications__header" th:text="${'Публикации: ' + chosenFilter}"></h1>
             <div class="publications">
                 <!--todo сделать иконку автора -->
-                <!--todo вынести в отдельный фрагмент (пока не получается из-за передачи объекта во фрагмент)-->
-                <div class="publication" th:each="publication: ${publications}"
-                     th:fragment="publication_card(${publication})">
-                    <div class="publication__top">
-                        <a th:href="${'/publications/byUser?userId=' + publication.author.id}"
-                           class="publication__author" th:text="${publication.getAuthor.login}"></a>
-                        <div class="publication__time"
-                             th:text="${#temporals.format(publication.publishDateTime, 'dd-MM-yyyy HH:mm')}"></div>
-                    </div>
-                    <div class="publication__header-wrapper">
-                        <a class="publication__header" th:text="${publication.header}"
-                           th:href="@{/publications/{id}/(id=${publication.id})}"></a>
-                    </div>
-                    <div class="publication__tags">
-                        <!--todo сделать ссылку, чтобы можно было перейти для просмотра статей по тэгам-->
-                        <span class="publication__tag" th:each="tag: ${publication.tags}"
-                              th:text="${tag.getName()}"></span>
-                    </div>
-                    <div class="publication__img-wrapper">
-                        <img class="publication__img"
-                             th:src="@{/uploads/{uuid}(uuid=${publication.previewImagePath})}"/>
-                    </div>
-                    <div class="publication__read-more-btn-wrapper">
-                        <!--todo переименовать читать в читать дальше-->
-                        <a class="publication__read-more-btn btn"
-                           th:href="@{/publications/{id}/(id=${publication.id})}">
-                            Читать
-                        </a>
-                    </div>
-                    <div class="publication__attributes">
-                        <div class="publication__karma publication__attribute">
-                            <img class="publication__karma-icon" th:src="@{/svg/karma-solid.svg}">
-                            <div class="publication__karma-text" th:text="${publication.karma}"></div>
-                        </div>
-                        <div class="publication__views-count publication__attribute">
-                            <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}">
-                            <div class="publication__views-count-text" th:text="${publication.viewsCount}"></div>
-                        </div>
-                        <div class="publication__comments-count publication__attribute">
-                            <img class="publication__comments-count-icon" th:src="@{/svg/comments-count-solid.svg}">
-                            <div class="publication__comments-count-text"
-                                 th:text="${publication.comments.size()}"></div>
-                        </div>
-                    </div>
-                </div>
+                <div th:each="publication: ${publications}"
+                     th:insert="~{fragments/publication_card(${publication})}"
+                     th:remove="tag"
+                     class="publication"
+                ></div>
+                <!--todo вынести во фрагмент-->
                 <div class="paginator">
                     <a th:hidden="${currentPage == 1}"
                        th:href="${'/publications?page=' + (currentPage - 1)}"><</a>
-                    <a th:text="${currentPage}" th:href="${'/publications?page=' + currentPage}"></a>
+                    <a th:hidden="${pagesCount == 1}"
+                       th:text="${currentPage}"
+                       th:href="${'/publications?page=' + currentPage}">
+                    </a>
                     <a th:hidden="${currentPage + 1 > pagesCount}"
-                       th:text="${currentPage + 1}"
-                       th:href="${'/publications?page=' + (currentPage + 1)}"></a>
+                       th:href="${'/publications?page=' + (currentPage + 1)}"
+                       th:text="${currentPage + 1}"></a>
                     <a th:hidden="${currentPage + 2 > pagesCount}"
-                       th:text="currentPage + 2"
-                       th:href="${'/publications?page=' + (currentPage + 2)}"></a>
+                       th:href="${'/publications?page=' + (currentPage + 2)}"
+                       th:text="currentPage + 2"></a>
                     <span th:hidden="${pagesCount < 5}" href="#">...</span>
                     <a th:hidden="${(pagesCount - 2) <= 2}"
-                       th:text="${(pagesCount - 2)}"
-                       th:href="${'/publications?page=' + (pagesCount - 2)}"></a>
+                       th:href="${'/publications?page=' + (pagesCount - 2)}"
+                       th:text="${(pagesCount - 2)}"></a>
                     <a th:hidden="${(pagesCount - 1) <= 1}"
-                       th:text="${(pagesCount - 1)}"
-                       th:href="${'/publications?page=' + (pagesCount - 1)}"></a>
+                       th:href="${'/publications?page=' + (pagesCount - 1)}"
+                       th:text="${(pagesCount - 1)}"></a>
                     <a th:hidden="${currentPage == pagesCount}"
                        th:href="${'/publications?page=' + (currentPage + 1)}">></a>
                 </div>
@@ -90,7 +54,8 @@
                        th:text="${miniPublication.header}"></a>
                     <div class="mini-publication__attrs">
                         <div class="publication__attribute">
-                            <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}" alt="">
+                            <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}"
+                                 alt="">
                             <span th:text="${miniPublication.viewsCount}"></span>
                         </div>
                         <div class="publication__attribute">

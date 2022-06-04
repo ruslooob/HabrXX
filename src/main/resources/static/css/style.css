@@ -80,6 +80,7 @@ a:visited {
 
 a.btn {
     text-decoration: none;
+    display: inline-block;
 }
 
 a.btn:hover {
