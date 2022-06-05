@@ -1,9 +1,4 @@
-table {
-    /*border: 1px solid black;*/
-}
-
 th {
-    /*border: 1px solid grey;*/
     text-align: center;
 }
 
@@ -12,7 +7,6 @@ td.publication__author-login {
 }
 
 td {
-    /*border: 1px solid grey;*/
     padding: 5px;
 }
 
@@ -25,7 +19,7 @@ tr:nth-child(even) {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: white;
     padding: 20px;
+    background-color: white;
     border-radius: 10px;
 }

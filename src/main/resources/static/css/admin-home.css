@@ -1,25 +1,25 @@
 .admin-home {
     flex: 1 1 auto;
-    flex-wrap: wrap;
     display: flex;
-    padding: 50px;
-    align-items: center;
-    border-radius: 20px;
     justify-content: center;
+    align-items: center;
     gap: 20px;
+    flex-wrap: wrap;
+    padding: 50px;
     background-color: white;
+    border-radius: 20px;
 }
 
 .card {
     width: 400px;
+    padding: 100px;
+    background-color: #a29bfe;
+    font-size: 30px;
+    text-align: center;
     color: white !important;
     text-decoration: none;
-    font-size: 30px;
-    padding: 100px;
     border-radius: 20px;
     transition: .3s linear all;
-    text-align: center;
-    background-color: #a29bfe;
     cursor: pointer;
 }
 

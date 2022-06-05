@@ -1,7 +1,7 @@
 <!--todo сделать, чтобы тематики вели на динамический урл (не критично)-->
 <div th:fragment="header" class="header__wrapper container-fluid">
     <header class="header container-1100">
-        <a th:href="@{/}" class="header__logo">HabrXX</a>
+        <a th:href="@{/}" class="header__logo" title="На главную">HabrXX</a>
         <div class="header__genres">
             <nav><a th:href="@{/publications}">Все</a></nav>
             <nav><a th:href="@{/publications?genreId=1}">Наука</a></nav>
@@ -12,21 +12,15 @@
         </div>
         <div class="header__right-buttons">
             <a th:href="@{/publications/add}">
-                <div title="Написать статью">
-                    <img th:if="${session.userId != null}" th:src="@{/svg/pencil-solid.svg}" alt="">
-                </div>
+                <img th:if="${session.userId != null}" th:src="@{/svg/pencil-solid.svg}" title="Написать статью" alt="">
             </a>
             <a th:if="${session.userId == null}" class="header__sign-in" th:href="@{/sign-in}">
                 <!--todo сделать функцию когда пользователь зашел, чтобы наверху был его логин-->
-                <div title="Вход">
-                    <img th:src="@{/svg/auth-solid.svg}" alt=""/>
-                </div>
+                <img th:src="@{/svg/auth-solid.svg}" title="Вход" alt=""/>
             </a>
-            <div title="Выйти">
-                <a th:unless="${session.userId == null}" th:href="@{/logout}">
-                    <img th:src="@{/svg/logout-solid.svg}" alt="">
-                </a>
-            </div>
+            <a th:unless="${session.userId == null}" th:href="@{/logout}" title="Выйти">
+                <img th:src="@{/svg/logout-solid.svg}" alt="">
+            </a>
         </div>
     </header>
 </div>

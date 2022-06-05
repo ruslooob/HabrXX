@@ -1,6 +1,6 @@
 .forbidden {
+    flex: 1 1 auto;
     padding: 20px;
     background-color: white;
-    flex: 1 1 auto;
     border-radius: 10px;
 }

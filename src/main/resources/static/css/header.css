@@ -1,7 +1,6 @@
 .header__wrapper {
     position: sticky;
     top: 0;
-    /*margin-top: -12px!important;*/
     z-index: 1;
 }
 
@@ -14,11 +13,11 @@
 }
 
 a.header__logo {
+    margin-right: 40px;
     font-size: 25px;
     font-weight: bold;
     text-decoration: none;
-    color: black!important;
-    margin-right: 40px;
+    color: black !important;
 }
 
 /*todo назвать навы*/
@@ -38,15 +37,15 @@ nav:hover {
 
 .header__right-buttons {
     display: flex;
-    gap: 20px;
     align-items: center;
+    gap: 20px;
 }
 
 .header__right-buttons img {
-    filter: invert(85%) sepia(20%) saturate(120%) hue-rotate(152deg) brightness(87%) contrast(88%);
-    cursor: pointer;
     width: 20px;
     height: 20px;
+    filter: invert(85%) sepia(20%) saturate(120%) hue-rotate(152deg) brightness(87%) contrast(88%);
+    cursor: pointer;
 }
 
 

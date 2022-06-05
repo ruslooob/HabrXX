@@ -1,37 +1,33 @@
 .publication_details.container-900 {
-    margin-top: 20px;
-    /*padding: 15px 20px;*/
-    /*background-color: white;*/
-    /*border-radius: 10px;*/
-    display: flex;
-    /*flex-direction: column;*/
-    gap: 20px;
     flex: 1 1 auto;
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .publication_details .main-center {
-    background-color: white;
     padding: 15px 20px;
-    border-radius: 10px;
     margin-top: 10px;
+    background-color: white;
+    border-radius: 10px;
 }
 
 .publication__first-row {
     display: flex;
-    gap: 20px;
     align-items: center;
+    gap: 20px;
 }
 
 span.delete-publication-btn {
-    cursor: pointer;
     color: red;
     border-color: red;
+    cursor: pointer;
 }
 
 .delete-publication-btn:hover {
+    background-color: red;
     color: white;
     border-color: white;
-    background-color: red;
 }
 
 .publication__preview-image-wrapper {
@@ -39,9 +35,9 @@ span.delete-publication-btn {
 }
 
 .publication__preview-image {
+    object-fit: cover;
     width: 552px;
     height: 300px;
-    object-fit: cover;
 }
 
 a.delete-publication-btn.btn {
@@ -50,8 +46,8 @@ a.delete-publication-btn.btn {
 }
 
 a.delete-publication-btn.btn:hover {
-    color: white;
     background-color: #d63031;
+    color: white;
 }
 
 .publication_details__views-count-img {
@@ -61,5 +57,5 @@ a.delete-publication-btn.btn:hover {
 
 .add-karma {
     width: 14px;
-    height: 16px!important;
+    height: 16px !important;
 }

@@ -2,13 +2,14 @@
     <a class="mini-publication__header" th:href="@{/publications/{id}(id=${miniPublication.id})}"
        th:text="${miniPublication.header}"></a>
     <div class="mini-publication__attrs">
-        <div class="publication__attribute">
+        <div class="publication__attribute" title="Кол-во просмотров">
             <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}"
                  alt="">
             <span th:text="${miniPublication.viewsCount}"></span>
         </div>
-        <div class="publication__attribute">
-            <img class="publication__comments-count-icon" th:src="@{/svg/comments-count-solid.svg}"
+        <div class="publication__attribute" title="Кол-во комментариев">
+            <img class="publication__comments-count-icon"
+                 th:src="@{/svg/comments-count-solid.svg}"
                  alt="">
             <span th:text="${miniPublication.commentsCount}"></span>
         </div>

@@ -1,19 +1,19 @@
 .reports-main {
     flex: 1 1 auto;
-    padding: 50px;
-    border-radius: 20px;
-    background-color: white;
     display: flex;
     flex-direction: column;
-    gap: 30px;
     justify-content: center;
+    gap: 30px;
+    padding: 50px;
+    background-color: white;
+    border-radius: 20px;
 }
 
 .cards {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 20px;
 }
 

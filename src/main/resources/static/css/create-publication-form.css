@@ -1,19 +1,17 @@
 .create-form__wrapper {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex: 1 1 auto;
 }
 
 input.form-create-publication__header {
     width: 800px;
-    /*outline: none;*/
 }
 
 .publication__content {
     width: 800px;
     height: 400px;
-    /*outline: none;*/
 }
 
 .form-create-publication {
@@ -26,8 +24,8 @@ input.form-create-publication__header {
 }
 
 .create-form__header {
+    padding: 10px;
     margin-top: 10px;
     background-color: white;
-    padding: 10px;
     border-radius: 10px;
 }

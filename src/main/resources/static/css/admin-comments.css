@@ -1,8 +1,8 @@
 .admin-comments {
+    flex: 1 1 auto;
     padding: 10px;
     background-color: white;
     border-radius: 10px;
-    flex: 1 1 auto;
 }
 
 tr.admin-comment > td {
@@ -20,7 +20,7 @@ span.admin-users__delete-user-btn {
 }
 
 span.admin-users__delete-user-btn:hover {
+    background-color: red;
     color: white;
     border-color: white;
-    background-color: red;
 }
