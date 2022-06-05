@@ -12,15 +12,21 @@
         </div>
         <div class="header__right-buttons">
             <a th:href="@{/publications/add}">
-                <img th:if="${session.userId != null}" th:src="@{/svg/pencil-solid.svg}" alt="">
+                <div title="Написать статью">
+                    <img th:if="${session.userId != null}" th:src="@{/svg/pencil-solid.svg}" alt="">
+                </div>
             </a>
             <a th:if="${session.userId == null}" class="header__sign-in" th:href="@{/sign-in}">
                 <!--todo сделать функцию когда пользователь зашел, чтобы наверху был его логин-->
-                <img th:src="@{/svg/auth-solid.svg}" alt=""/>
+                <div title="Вход">
+                    <img th:src="@{/svg/auth-solid.svg}" alt=""/>
+                </div>
             </a>
-            <a th:unless="${session.userId == null}" th:href="@{/logout}">
-                <img th:src="@{/svg/logout-solid.svg}" alt="">
-            </a>
+            <div title="Выйти">
+                <a th:unless="${session.userId == null}" th:href="@{/logout}">
+                    <img th:src="@{/svg/logout-solid.svg}" alt="">
+                </a>
+            </div>
         </div>
     </header>
 </div>

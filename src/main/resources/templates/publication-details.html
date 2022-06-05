@@ -49,18 +49,22 @@
             <h4 th:text="${'Тэги: ' + publication.getTags()}"></h4>
             <div class="publication__attributes">
                 <div class="publication__karma publication__attribute">
-                    <a th:if="${session.userId != null}" style="cursor:pointer;"><img src="/svg/karma-solid.svg" alt=""
-                                                                                      class="add-karma"
-                                                                                      onclick="addLike()"></a>
+                    <a th:if="${session.userId != null}" style="cursor:pointer;">
+                        <img src="/svg/karma-solid.svg" alt=""
+                             class="add-karma"
+                             onclick="addLike()"
+                             title="Карма вверх!">
+                    </a>
                     <img th:unless="${session.userId != null}" class="publication__karma-icon"
-                         th:src="@{/svg/karma-solid.svg}" alt="">
-                    <div class="publication__karma-text" th:text="${publication.karma}"></div>
+                         th:src="@{/svg/karma-solid.svg}" alt="" title="Карма">
+
+                    <div class="publication__karma-text" th:text="${publication.karma}" title="Карма"></div>
                 </div>
-                <div class="publication__views-count publication__attribute">
+                <div class="publication__views-count publication__attribute" title="Кол-во просмотров">
                     <img class="publication__views-count-icon" th:src="@{/svg/views-count-solid.svg}" alt="">
                     <div class="publication__views-count-text" th:text="${publication.viewsCount}"></div>
                 </div>
-                <div class="publication__comments-count publication__attribute">
+                <div class="publication__comments-count publication__attribute" title="Кол-во комментариев">
                     <img class="publication__comments-count-icon" th:src="@{/svg/comments-count-solid.svg}">
                     <div class="publication__comments-count-text" th:text="${comments.size()}"></div>
                 </div>
@@ -77,12 +81,6 @@
                 <li th:text="${comment.getUser().getLogin() + ' ' + comment.getDateTime()}"></li>
                 <li th:text="${comment.getContent()}" style="list-style-type: none">
                 </li>
-                <!--            <div th:if="${session.userId}==${comment.getUser().getId()}">-->
-                <!--                <form th:action="@{/publications/{publicationId}/comments/{id}(id=${comment.id}, publicationId=${publication.id})}"-->
-                <!--                      th:method="delete">-->
-                <!--                    <button type="submit" class="btn">Удалить</button>-->
-                <!--                </form>-->
-                <!--            </div>-->
             </ul>
         </div>
         <div class="main-left">
