@@ -124,6 +124,7 @@ public class PublicationController {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
+        // todo подумать, как тут избавиться от пустого конструктора
         model.addAttribute("publication", new CreatePublicationDto());
         model.addAttribute("genres", genreRepository.findAll());
         model.addAttribute("tags", tagRepository.findAll());
@@ -133,14 +134,14 @@ public class PublicationController {
     @PostMapping
     public String createPublication(Model model,
                                     @RequestParam(value = "file", required = false) MultipartFile file,
-                                    CreatePublicationDto publicationDto,
+                                    CreatePublicationDto createPublicationDto,
                                     HttpSession httpSession) {
         if (httpSession.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
-        publicationDto.setPreviewImage(file);
-        publicationService.save(publicationDto, (Long) httpSession.getAttribute("userId"));
+        createPublicationDto.setPreviewImage(file);
+        publicationService.save(createPublicationDto, (Long) httpSession.getAttribute("userId"));
         return "redirect:/publications";
     }
 

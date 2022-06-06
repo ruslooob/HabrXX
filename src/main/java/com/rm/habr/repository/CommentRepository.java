@@ -18,9 +18,6 @@ import java.util.List;
 @Repository
 public class CommentRepository {
 
-    private static final RowMapper<Comment> COMMENT_MAPPER = JdbcTemplateMapperFactory.newInstance()
-            .ignorePropertyNotFound()
-            .newRowMapper(Comment.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired

@@ -48,7 +48,7 @@ public class PublicationService {
             genres.add(new Genre(genreId));
         }
         publication.setGenres(genres);
-        String pathToSave = fileStorageService.save(publicationDto.getPreviewImage());
+        String pathToSave = fileStorageService.save(publicationDto.previewImage);
         publication.setPreviewImagePath(pathToSave);
         return publicationRepository.insert(publication);
     }

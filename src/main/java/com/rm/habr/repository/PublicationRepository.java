@@ -1,40 +1,19 @@
 package com.rm.habr.repository;
 
 import com.rm.habr.model.*;
-import com.rm.habr.repository.mapper.BestUserMapper;
-import com.rm.habr.repository.mapper.MiniPublicationMapper;
-import com.rm.habr.repository.mapper.PublicationMapper;
-import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
-import org.simpleflatmapper.reflect.property.MapTypeProperty;
+import com.rm.habr.repository.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class PublicationRepository {
-
-    private static final RowMapper<Publication> PUBLICATION_MAPPER = JdbcTemplateMapperFactory.newInstance()
-            .addColumnProperty(col -> col.getName().equals("image_path"), MapTypeProperty.KEY_VALUE)
-            .newRowMapper(Publication.class);
-
-    private static final RowMapper<Genre> GENRE_MAPPER = JdbcTemplateMapperFactory.newInstance()
-            .ignorePropertyNotFound()
-            .newRowMapper(Genre.class);
-
-    private static final RowMapper<Tag> TAG_MAPPER = JdbcTemplateMapperFactory.newInstance()
-            .ignorePropertyNotFound()
-            .newRowMapper(Tag.class);
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -117,7 +96,7 @@ public class PublicationRepository {
                 ORDER BY publication_datetime DESC
                 """;
 
-        List<Publication> publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper());
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper());
         publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
@@ -146,7 +125,7 @@ public class PublicationRepository {
                 offset 10 * (?-1)
                 """;
 
-        List<Publication> publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), page);
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), page);
         publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
@@ -172,7 +151,7 @@ public class PublicationRepository {
                          LEFT JOIN "user"  on "user".user_id = "publication".user_id
                 WHERE publication_id = ?
                 """;
-        Optional<Publication> publication = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), id)
+        var publication = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), id)
                 .stream().findAny();
 
         publication.ifPresent(p -> p.setGenres(findGenresByPublicationId(p.getId())));
@@ -219,10 +198,10 @@ public class PublicationRepository {
                 WHERE publication_id = ? AND user_id = ?
                 """;
 
-        List<Long> userIdObj = jdbcTemplate.getJdbcTemplate()
+        var userIds = jdbcTemplate.getJdbcTemplate()
                 .query(sql, (rs, rowNum) -> rs.getLong("user_id"), publicationId, userId);
 
-        return !userIdObj.isEmpty();
+        return !userIds.isEmpty();
     }
 
     private List<Genre> findGenresByPublicationId(long publicationId) {
@@ -233,7 +212,7 @@ public class PublicationRepository {
                 WHERE rt.publication_id = ?
                 """;
 
-        return jdbcTemplate.getJdbcTemplate().query(sql, GENRE_MAPPER, publicationId);
+        return jdbcTemplate.getJdbcTemplate().query(sql, new GenreMapper(), publicationId);
     }
 
     private List<Tag> findTagsByPublicationId(long publicationId) {
@@ -244,7 +223,7 @@ public class PublicationRepository {
                 WHERE marked.publication_id = ?
                 """;
 
-        return jdbcTemplate.getJdbcTemplate().query(sql, TAG_MAPPER, publicationId);
+        return jdbcTemplate.getJdbcTemplate().query(sql, new TagMapper(), publicationId);
     }
 
     public List<Publication> findAllByGenre(Long genreId) {
@@ -269,7 +248,7 @@ public class PublicationRepository {
                 ORDER BY publication_datetime DESC
                 """;
 
-        List<Publication> publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreId);
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreId);
 
         publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
@@ -302,7 +281,7 @@ public class PublicationRepository {
                 offset 10 * (? - 1)
                 """;
 
-        List<Publication> publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreId, page);
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreId, page);
 
         publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
@@ -342,7 +321,7 @@ public class PublicationRepository {
                 ORDER BY publication_datetime DESC
                 """;
 
-        List<Publication> publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), userId);
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), userId);
 
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
@@ -408,9 +387,9 @@ public class PublicationRepository {
                 limit 5;
                 """;
 
-        List<MiniPublication> miniPublications = jdbcTemplate.getJdbcTemplate().query(sql, new MiniPublicationMapper());
+        var miniPublications = jdbcTemplate.getJdbcTemplate().query(sql, new MiniPublicationMapper());
         miniPublications.forEach(mp -> {
-            List<Comment> comments = commentRepository.findCommentsByPublicationId(mp.getId());
+            var comments = commentRepository.findCommentsByPublicationId(mp.getId());
             mp.setCommentsCount(comments.size());
         });
         return miniPublications;

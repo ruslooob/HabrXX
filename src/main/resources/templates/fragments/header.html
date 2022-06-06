@@ -3,6 +3,7 @@
     <header class="header container-1100">
         <a th:href="@{/}" class="header__logo" title="На главную">HabrXX</a>
         <div class="header__genres">
+            <!-- todo тут можно не по айдишникам, а по названию жанра-->
             <nav><a th:href="@{/publications}">Все</a></nav>
             <nav><a th:href="@{/publications?genreId=1}">Наука</a></nav>
             <nav><a th:href="@{/publications?genreId=3}">Технологии</a></nav>

@@ -60,7 +60,7 @@ div.publication__header-wrapper a.publication__header {
 }
 
 div.publication__header-wrapper a.publication__header:hover {
-    color: #74b9ff;
+    color: #4583c2;
 }
 
 .publication__img-wrapper {
@@ -150,6 +150,11 @@ img.publication__comments-count-icon {
     font-weight: bold;
     color: black !important;
     text-decoration: none !important;
+    transition: .2s linear color;
+}
+
+.mini-publication__header:hover {
+    color: #4583c2 !important;
 }
 
 .mini-publication__attrs {

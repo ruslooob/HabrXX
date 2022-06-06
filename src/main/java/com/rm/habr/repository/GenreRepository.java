@@ -2,6 +2,7 @@ package com.rm.habr.repository;
 
 import com.rm.habr.model.Comment;
 import com.rm.habr.model.Genre;
+import com.rm.habr.repository.mapper.GenreMapper;
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,9 +14,6 @@ import java.util.List;
 @Repository
 public class GenreRepository {
 
-    private static final RowMapper<Genre> GENRE_MAPPER = JdbcTemplateMapperFactory.newInstance()
-            .ignorePropertyNotFound()
-            .newRowMapper(Genre.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -25,11 +23,11 @@ public class GenreRepository {
 
     public List<Genre> findAll() {
         final String sql = """
-                SELECT genre.genre_id AS id, genre_name AS name
+                SELECT genre.genre_id AS id, genre_name AS "name"
                 FROM genre
                 """;
 
-        return jdbcTemplate.getJdbcTemplate().query(sql, GENRE_MAPPER);
+        return jdbcTemplate.getJdbcTemplate().query(sql, new GenreMapper());
     }
 
 }

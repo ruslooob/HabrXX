@@ -99,7 +99,7 @@ public class UserRepository {
                 FROM "user"
                 WHERE "user".user_id = ?
                 """;
-
+    /*избавиться от маппера*/
         return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, id)
                 .stream().findAny();
     }

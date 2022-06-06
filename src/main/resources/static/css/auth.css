@@ -32,3 +32,11 @@
     background-color: #e8f0fe;
     width: 100%;
 }
+
+.auth-form input[type=submit] {
+    cursor: pointer;
+    transition: 0.2s linear opacity;
+}
+.auth-form input[type=submit]:hover {
+    opacity: 0.8;
+}
