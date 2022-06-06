@@ -12,13 +12,26 @@
     <div class="auth-form__wrapper">
         <h1 class="auth-main__header">Регистрация</h1>
         <form class="auth-form" th:action="@{/sign-up}" th:object="${user}" method="post">
-            <input type="text" th:field="*{fullName}" placeholder="ФИО"/>
-            <input type="text" th:field="*{login}" placeholder="Логин"/>
-            <input type="text" th:field="*{email}" placeholder="Электронная почта"/>
-            <input type="password" th:field="*{password}" placeholder="Пароль"/>
+            <div class="form-group">
+                <input id="sign-up-login" type="text" th:field="*{login}" placeholder="Логин"/>
+                <label class="error-text" for="sign-up-login" th:if="${#fields.errors('login')}" th:errors="*{login}">
+                    Login Error</label>
+            </div>
+            <div class="form-group">
+                <input id="sign-up-email" type="text" th:field="*{email}" placeholder="Электронная почта"/>
+                <label class="error-text" for="sign-up-email" th:if="${#fields.errors('email')}" th:errors="*{email}">
+                    Email Error</label>
+            </div>
+            <div class="form-group">
+                <input id="sign-up-password" type="password" th:field="*{password}" placeholder="Пароль"/>
+                <label class="error-text" for="sign-up-password" th:if="${#fields.errors('password')}"
+                       th:errors="*{password}">
+                    Password Error</label>
+            </div>
             <input type="submit" value="Зарегистрироваться"/>
         </form>
     </div>
 </main>
+<footer th:replace="fragments/footer"></footer>
 </body>
 </html>

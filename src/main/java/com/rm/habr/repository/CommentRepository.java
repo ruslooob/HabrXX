@@ -66,7 +66,6 @@ public class CommentRepository {
                        comment_datetime AS "datetime",
                        comment_karma    AS karma,
                        "user".user_id,
-                       user_full_name,
                        user_email,
                        user_login,
                        user_karma

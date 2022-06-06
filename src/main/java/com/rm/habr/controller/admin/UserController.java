@@ -7,10 +7,13 @@ import com.rm.habr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Controller("AdminUserController")
 @RequestMapping("/admin")
@@ -48,6 +51,7 @@ public class UserController {
 
     @PostMapping("/users")
     public String createUser(@ModelAttribute RegisterUserDto user,
+                             BindingResult bindingResult,
                              @RequestParam(required = false) Boolean isAdmin,
                              HttpSession session,
                              Model model) {
@@ -56,13 +60,18 @@ public class UserController {
             return "forbidden";
         }
         //todo сообщение об ошибках
-        boolean isUserCanSignUp = userService.checkUserCanSignUp(user);
-        if (isUserCanSignUp) {
+        Optional<String> validateSignUpMsg = userService.validateSignUp(user);
+        if (validateSignUpMsg.isEmpty()) {
             if (isAdmin != null) {
                 userService.saveAdmin(user);
             } else {
                 userService.save(user);
             }
+        } else {
+            bindingResult.addError(new ObjectError("login", validateSignUpMsg.get()));
+            long userId = userService.save(user);
+            session.setAttribute("userId", userId);
+            return "redirect:/users";
         }
         List<User> users = userService.findAllUsers();
         model.addAttribute("users", users);

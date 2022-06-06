@@ -10,29 +10,31 @@
     <title>ХабрХХ Вход</title>
 </head>
 <body>
-<!-- todo сделать валидацию на клиенте-->
-<!-- todo сделать повторение пароля на клиенте-->
-<div th:replace="~{fragments/header}"></div>
-<div class="auth-main container-1100">
-    <div class="auth-form__wrapper">
-        <h1 class="auth-main__header">Вход</h1>
-        <form class="auth-form" th:action="@{/sign-in}" th:object="${user}" method="post">
-            <div class="form-group">
-                <input id="sign-in-login" type="text" th:field="*{login}" placeholder="Логин"
-                       minlength="3" maxlength="20" required/>
-                <label class="error-text" for="sign-in-login" th:if="${#fields.hasErrors('login')}"
-                       th:errors="*{login}">Login Error</label>
-            </div>
-            <div class="form-group">
-                <input id="sign-in-password" type="password" th:field="*{password}" placeholder="Пароль"
-                       minlength="5" maxlength="100"/>
-                <label class="error-text" for="sign-in-password" th:if="${#fields.hasErrors('password')}"
-                       th:errors="*{password}">Password Error</label>
-            </div>
-            <a th:href="@{/sign-up}">Еще не зарегистрированы?</a>
-            <input type="submit" value="Войти"/>
-        </form>
+<div class="wrapper">
+    <!-- todo сделать повторение пароля на клиенте-->
+    <div th:replace="~{fragments/header}"></div>
+    <div class="auth-main container-1100">
+        <div class="auth-form__wrapper">
+            <h1 class="auth-main__header">Вход</h1>
+            <form class="auth-form" th:action="@{/sign-in}" th:object="${user}" method="post">
+                <div class="form-group">
+                    <input id="sign-in-login" type="text" th:field="*{login}" placeholder="Логин"
+                           minlength="3" maxlength="20" required/>
+                    <label class="error-text" for="sign-in-login" th:if="${#fields.hasErrors('login')}"
+                           th:errors="*{login}">Login Error</label>
+                </div>
+                <div class="form-group">
+                    <input id="sign-in-password" type="password" th:field="*{password}" placeholder="Пароль"
+                           minlength="5" maxlength="100"/>
+                    <label class="error-text" for="sign-in-password" th:if="${#fields.hasErrors('password')}"
+                           th:errors="*{password}">Password Error</label>
+                </div>
+                <a th:href="@{/sign-up}">Еще не зарегистрированы?</a>
+                <input type="submit" value="Войти"/>
+            </form>
+        </div>
     </div>
+    <footer th:replace="fragments/footer"></footer>
 </div>
 </body>
 </html>

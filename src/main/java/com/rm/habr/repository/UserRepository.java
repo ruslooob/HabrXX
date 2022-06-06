@@ -29,11 +29,10 @@ public class UserRepository {
 
     public long insert(RegisterUserDto user) {
         String sql = """
-                insert into "user" (user_full_name, user_email, user_login, user_password)
-                values  (:fullName, :email, :login, :password)
+                insert into "user" (user_email, user_login, user_password)
+                values  (:email, :login, :password)
                 """;
         var params = new MapSqlParameterSource()
-                .addValue("fullName", user.getFullName())
                 .addValue("email", user.getEmail())
                 .addValue("login", user.getLogin())
                 .addValue("password", user.getPassword());
@@ -47,7 +46,6 @@ public class UserRepository {
         final String sql = """
                 SELECT "user".user_id        AS id,
                        "user".user_email     AS email,
-                       "user".user_full_name AS full_name,
                        "user".user_login     AS "login",
                        "user".user_password  AS "password",
                        "user".user_karma     AS karma
@@ -64,7 +62,6 @@ public class UserRepository {
         final String sql = """
                 SELECT "user".user_id        AS id,
                        "user".user_email     AS email,
-                       "user".user_full_name AS full_name,
                        "user".user_login     AS "login",
                        "user".user_karma     AS karma
                 FROM "user"
@@ -79,7 +76,6 @@ public class UserRepository {
         final String sql = """
                 SELECT "user".user_id        AS id,
                        "user".user_email     AS email,
-                       "user".user_full_name AS full_name,
                        "user".user_login     AS "login",
                        "user".user_karma     AS karma
                 FROM "user"
@@ -105,7 +101,7 @@ public class UserRepository {
 
     public List<User> findAll() {
         final String sql = """
-                select user_id, user_full_name, user_email, user_login, user_karma
+                select user_id, user_email, user_login, user_karma
                 from "user";
                 """;
         return jdbcTemplate.query(sql, new UserMapper());

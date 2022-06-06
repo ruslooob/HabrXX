@@ -27,7 +27,6 @@ public class PublicationMapper implements RowMapper<Publication> {
     private User mapUser(ResultSet rs, int rowNum) throws SQLException {
         return User.builder()
                 .id(rs.getLong("user_id"))
-                .fullName(rs.getString("user_full_name"))
                 .login(rs.getString("user_login"))
                 .email(rs.getString("user_email"))
                 .karma(rs.getShort("user_karma"))

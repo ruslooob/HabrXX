@@ -26,11 +26,13 @@ public class UserService {
     }
 
 
-    public boolean checkUserCanSignUp(RegisterUserDto user) {
+    public Optional<String> validateSignUp(RegisterUserDto user) {
         // check that user login, email does not repeat
         Optional<User> optionalUser = userRepository.findByLogin(user.getLogin());
-        // TODO: validate fields
-        return optionalUser.isEmpty();
+        if (optionalUser.isEmpty())  {
+            return Optional.of("Пользователь с таким логином уже существует!");
+        }
+        return Optional.empty();
     }
 
     public Optional<Long> checkUserCanSignInAndGetId(LoginUserDto user) {

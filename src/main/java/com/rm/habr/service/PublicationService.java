@@ -73,11 +73,11 @@ public class PublicationService {
         publicationRepository.addLike(publicationId, userId);
     }
 
-    public Publications findPageByGenre(Long genreId, Integer page) {
-        if (genreId == null) {
+    public Publications findPageByGenreName(String genreName, Integer page) {
+        if (genreName.equalsIgnoreCase("Все")) {
             return publicationRepository.findPage(page);
         }
-        return publicationRepository.findPageByGenre(genreId, page);
+        return publicationRepository.findPageByGenreName(genreName, page);
     }
 
     public List<Publication> findAllByUserId(Long userId) {

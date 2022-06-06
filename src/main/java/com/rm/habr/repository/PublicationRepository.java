@@ -88,7 +88,6 @@ public class PublicationRepository {
                        publication_karma,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"
@@ -115,7 +114,6 @@ public class PublicationRepository {
                        publication_karma,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"
@@ -144,7 +142,6 @@ public class PublicationRepository {
                        publication_preview_image_path,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"
@@ -237,7 +234,6 @@ public class PublicationRepository {
                        publication_karma,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"
@@ -257,7 +253,7 @@ public class PublicationRepository {
         return publications;
     }
 
-    public Publications findPageByGenre(Long genreId, Integer page) {
+    public Publications findPageByGenreName(String genreName, Integer page) {
         final String sql = """
                 SELECT "publication".publication_id,
                        publication_views_count,
@@ -268,20 +264,19 @@ public class PublicationRepository {
                        publication_karma,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"
                          LEFT JOIN "user" on "user".user_id = "publication".user_id
                          INNER JOIN relates_to genres on "publication".publication_id = genres.publication_id
                          INNER JOIN genre on genres.genre_id = genre.genre_id
-                WHERE genres.genre_id = ?
+                WHERE genre.genre_name ilike ?
                 ORDER BY publication_datetime DESC
                 limit 10
                 offset 10 * (? - 1)
                 """;
 
-        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreId, page);
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreName, page);
 
         publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
@@ -310,7 +305,6 @@ public class PublicationRepository {
                        publication_karma,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"
@@ -364,7 +358,6 @@ public class PublicationRepository {
                        publication_preview_image_path,
                        "user".user_id,
                        user_login,
-                       user_full_name,
                        user_email,
                        user_karma
                 FROM "publication"

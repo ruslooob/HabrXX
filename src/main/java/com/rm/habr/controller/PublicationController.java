@@ -48,28 +48,13 @@ public class PublicationController {
 
     @GetMapping
     public String getAllPublications(Model model,
-                                     @RequestParam(required = false) Long genreId,
+                                     @RequestParam(value = "genre", required = false, defaultValue = "Все") String genreName,
                                      @RequestParam(defaultValue = "1") Integer page) {
-        Publications publications = publicationService.findPageByGenre(genreId, page);
+        Publications publications = publicationService.findPageByGenreName(genreName, page);
         model.addAttribute("publications", publications.getPublications());
         model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
         model.addAttribute("currentPage", page);
-        // удалить отсюда if
-        String chosenFilter = "";
-        if (genreId == null) {
-            chosenFilter = "Все";
-        } else if (genreId == 1) {
-            chosenFilter = "Наука";
-        } else if (genreId == 2) {
-            chosenFilter = "Научпоп";
-        } else if (genreId == 3) {
-            chosenFilter = "Технологии";
-        } else if (genreId == 6) {
-            chosenFilter = "Политика";
-        } else {
-            chosenFilter = "Все";
-        }
-        model.addAttribute("chosenFilter", chosenFilter);
+        model.addAttribute("chosenFilter", genreName);
         List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
         model.addAttribute("miniPublications", miniPublications);
         return "publications";
