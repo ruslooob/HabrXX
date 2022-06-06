@@ -1,5 +1,6 @@
 package com.rm.habr.controller.admin;
 
+import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
 import com.rm.habr.service.RightService;
 import com.rm.habr.service.UserService;
@@ -23,10 +24,9 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("/users")
-    public String getAllUsers(Model model, HttpSession httpSession) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String getAllUsers(Model model, HttpSession session) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @GetMapping("/users/create-form")
-    public String showCreateUserForm(Model model, HttpSession httpSession) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String showCreateUserForm(Model model, HttpSession session) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
@@ -47,11 +47,11 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public String createUser(@ModelAttribute User user,
+    public String createUser(@ModelAttribute RegisterUserDto user,
                              @RequestParam(required = false) Boolean isAdmin,
-                             HttpSession httpSession,
+                             HttpSession session,
                              Model model) {
-        if (!rightService.isUserAdmin(httpSession)) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
@@ -70,8 +70,8 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{userId}")
-    public String deleteUser(@PathVariable Long userId, HttpSession httpSession, Model model) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String deleteUser(@PathVariable Long userId, HttpSession session, Model model) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }

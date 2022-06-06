@@ -1,5 +1,6 @@
 package com.rm.habr.controller;
 
+import com.rm.habr.dto.CreateCommentDto;
 import com.rm.habr.model.Comment;
 import com.rm.habr.model.User;
 import com.rm.habr.repository.CommentRepository;
@@ -23,10 +24,9 @@ public class CommentController {
     }
 
     @PostMapping("/{publicationId}/comments")
-    public String createComment(@PathVariable long publicationId, @ModelAttribute Comment comment, HttpSession session) {
+    public String createComment(@PathVariable long publicationId, @ModelAttribute CreateCommentDto comment, HttpSession session) {
         comment.setPublicationId(publicationId);
-        comment.setUser(new User((Long) session.getAttribute("userId")));
-        comment.setDateTime(LocalDateTime.now());
+        comment.setAuthor(new User((Long) session.getAttribute("userId")));
         commentRepository.insert(comment);
 
         return "redirect:/publications/" + publicationId;

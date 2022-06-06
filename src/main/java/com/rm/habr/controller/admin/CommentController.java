@@ -28,8 +28,8 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public String getAllComments(Model model, HttpSession httpSession) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String getAllComments(Model model, HttpSession session) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
@@ -40,8 +40,8 @@ public class CommentController {
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public String deleteComment(@PathVariable Long commentId, HttpSession httpSession, Model model) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String deleteComment(@PathVariable Long commentId, HttpSession session, Model model) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }

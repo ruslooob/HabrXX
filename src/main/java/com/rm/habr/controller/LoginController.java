@@ -1,17 +1,21 @@
 package com.rm.habr.controller;
 
+import com.rm.habr.dto.LoginUserDto;
+import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
 import com.rm.habr.service.RightService;
 import com.rm.habr.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -31,22 +35,29 @@ public class LoginController {
         return "redirect:/publications";
     }
 
-        @GetMapping("/sign-in")
+    @GetMapping("/sign-in")
     public String loginPage(Model model) {
         model.addAttribute("user", new User());
         return "sign-in";
     }
 
     @PostMapping("/sign-in")
-    public String signIn(@ModelAttribute User user, HttpSession httpSession, Model model) {
+    public String signIn(@Valid @ModelAttribute("user") LoginUserDto user,
+                         BindingResult bindingResult,
+                         HttpSession session,
+                         Model model) {
+        if (bindingResult.hasErrors()) {
+            return "sign-in";
+        }
+
         Optional<Long> optionalUserId = userService.checkUserCanSignInAndGetId(user);
         if (optionalUserId.isEmpty()) {
             model.addAttribute("errorMessage", "Пользователь с таким логином не зарегистрирован");
             return "redirect:/sign-in";
         }
-        httpSession.setAttribute("userId", optionalUserId.get());
-        if (rightService.isUserAdmin(httpSession)) {
-            httpSession.setAttribute("isAdmin", true);
+        session.setAttribute("userId", optionalUserId.get());
+        if (rightService.isUserAdmin(session)) {
+            session.setAttribute("isAdmin", true);
         }
         return "redirect:/publications";
     }
@@ -58,20 +69,20 @@ public class LoginController {
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@ModelAttribute User user, HttpSession httpSession) {
+    public String signUp(@ModelAttribute RegisterUserDto user, HttpSession session) {
         boolean isUserCanSignUp = userService.checkUserCanSignUp(user);
         if (isUserCanSignUp) {
             long userId = userService.save(user);
-            httpSession.setAttribute("userId", userId);
+            session.setAttribute("userId", userId);
             return "redirect:/publications";
         }
         return "redirect:/";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("userId");
-        httpSession.removeAttribute("isAdmin");
+    public String logout(HttpSession session) {
+        session.removeAttribute("userId");
+        session.removeAttribute("isAdmin");
         return "redirect:/publications";
     }
 

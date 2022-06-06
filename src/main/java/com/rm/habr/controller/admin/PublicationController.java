@@ -25,8 +25,8 @@ public class PublicationController {
     }
 
     @GetMapping("/publications")
-    public String getAllPublications(Model model, HttpSession httpSession) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String getAllPublications(Model model, HttpSession session) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }

@@ -1,5 +1,7 @@
 package com.rm.habr.service;
 
+import com.rm.habr.dto.LoginUserDto;
+import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
 import com.rm.habr.repository.UserRepository;
 import org.slf4j.Logger;
@@ -24,14 +26,14 @@ public class UserService {
     }
 
 
-    public boolean checkUserCanSignUp(User user) {
+    public boolean checkUserCanSignUp(RegisterUserDto user) {
         // check that user login, email does not repeat
         Optional<User> optionalUser = userRepository.findByLogin(user.getLogin());
         // TODO: validate fields
         return optionalUser.isEmpty();
     }
 
-    public Optional<Long> checkUserCanSignInAndGetId(User user) {
+    public Optional<Long> checkUserCanSignInAndGetId(LoginUserDto user) {
         Optional<User> optionalUser = userRepository.findByLogin(user.getLogin());
         if (optionalUser.isEmpty()) {
             return Optional.empty();
@@ -57,13 +59,13 @@ public class UserService {
         return userRepository.isUserAdmin(id);
     }
 
-    public Long save(User user) {
+    public Long save(RegisterUserDto user) {
         String hashedPassword = hashPassword(user.getPassword());
         user.setPassword(hashedPassword);
         return userRepository.insert(user);
     }
 
-    public void saveAdmin(User user) {
+    public void saveAdmin(RegisterUserDto user) {
         Long saveId = save(user);
         userRepository.saveAdmin(saveId);
     }

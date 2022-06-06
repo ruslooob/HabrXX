@@ -11,6 +11,7 @@
     padding: 30px;
     background-color: white;
     border-radius: 10px;
+    width: 300px;
 }
 
 .auth-main__header {
@@ -37,6 +38,22 @@
     cursor: pointer;
     transition: 0.2s linear opacity;
 }
+
 .auth-form input[type=submit]:hover {
     opacity: 0.8;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+.error-text {
+    padding: 10px;
+    color: red;
+    border: 1px solid gray;
+    background-color: #f6f6f8;
+    border-radius: 10px;
 }

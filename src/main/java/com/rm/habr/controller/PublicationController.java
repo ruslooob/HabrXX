@@ -119,8 +119,8 @@ public class PublicationController {
     }
 
     @GetMapping("/add")
-    public String showPublicationForm(Model model, HttpSession httpSession) {
-        if (httpSession.getAttribute("userId") == null) {
+    public String showPublicationForm(Model model, HttpSession session) {
+        if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
@@ -135,19 +135,19 @@ public class PublicationController {
     public String createPublication(Model model,
                                     @RequestParam(value = "file", required = false) MultipartFile file,
                                     CreatePublicationDto createPublicationDto,
-                                    HttpSession httpSession) {
-        if (httpSession.getAttribute("userId") == null) {
+                                    HttpSession session) {
+        if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
         createPublicationDto.setPreviewImage(file);
-        publicationService.save(createPublicationDto, (Long) httpSession.getAttribute("userId"));
+        publicationService.save(createPublicationDto, (Long) session.getAttribute("userId"));
         return "redirect:/publications";
     }
 
     @GetMapping("/update")
-    public String showPublicationUpdateForm(Model model, @RequestParam long id, HttpSession httpSession) {
-        if (httpSession.getAttribute("userId") == null) {
+    public String showPublicationUpdateForm(Model model, @RequestParam long id, HttpSession session) {
+        if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }

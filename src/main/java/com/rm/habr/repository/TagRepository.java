@@ -23,7 +23,7 @@ public class TagRepository {
 
     public List<Tag> findAll() {
         final String sql = """
-                SELECT "tag".tag_id AS id, tag_name AS "name"
+                SELECT "tag".tag_id, tag_name
                 FROM "tag"
                 """;
 

@@ -1,5 +1,6 @@
 package com.rm.habr.repository;
 
+import com.rm.habr.dto.CreateCommentDto;
 import com.rm.habr.model.AdminComment;
 import com.rm.habr.model.Comment;
 import com.rm.habr.repository.mapper.AdminCommentMapper;
@@ -42,16 +43,15 @@ public class CommentRepository {
         return jdbcTemplate.query(sql, new AdminCommentMapper());
     }
 
-    public long insert(Comment comment) {
+    public long insert(CreateCommentDto comment) {
         final String sql = """
                 insert into "comment" (user_id, publication_id, comment_content)
                 values  (:userId, :publicationId, :content)
                 """;
         var params = new MapSqlParameterSource()
-                .addValue("userId", comment.getUser().getId())
+                .addValue("userId", comment.getAuthor().getId())
                 .addValue("publicationId", comment.getPublicationId())
                 .addValue("content", comment.getContent());
-//                .addValue("date", LocalDate.now());
         var keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(sql, params, keyHolder);
@@ -65,13 +65,13 @@ public class CommentRepository {
                        comment_content  AS "content",
                        comment_datetime AS "datetime",
                        comment_karma    AS karma,
-                       u.user_id,
+                       "user".user_id,
                        user_full_name,
                        user_email,
                        user_login,
                        user_karma
                 FROM "comment"
-                    LEFT JOIN "user" u on u.user_id = "comment".user_id
+                    LEFT JOIN "user" on "user".user_id = "comment".user_id
                 WHERE publication_id = ?
                 """;
         return jdbcTemplate.getJdbcTemplate().query(sql, new CommentMapper(), publicationId);

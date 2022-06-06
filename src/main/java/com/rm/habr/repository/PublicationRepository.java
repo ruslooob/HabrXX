@@ -206,7 +206,7 @@ public class PublicationRepository {
 
     private List<Genre> findGenresByPublicationId(long publicationId) {
         final String sql = """
-                SELECT genre.genre_id, genre_name AS "name"
+                SELECT genre.genre_id, genre_name
                 FROM genre
                     INNER JOIN relates_to rt on genre.genre_id = rt.genre_id
                 WHERE rt.publication_id = ?
@@ -217,7 +217,7 @@ public class PublicationRepository {
 
     private List<Tag> findTagsByPublicationId(long publicationId) {
         final String sql = """
-                SELECT "tag".tag_id AS id, tag_name AS "name"
+                SELECT "tag".tag_id, "tag".tag_name
                 FROM "tag"
                     INNER JOIN marked on "tag".tag_id = marked.tag_id
                 WHERE marked.publication_id = ?

@@ -27,8 +27,8 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getAdminPage(Model model, HttpSession httpSession) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String getAdminPage(Model model, HttpSession session) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }

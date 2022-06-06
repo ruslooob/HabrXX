@@ -1,5 +1,6 @@
 package com.rm.habr.repository;
 
+import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
 import com.rm.habr.repository.mapper.UserMapper;
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
@@ -26,10 +27,10 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public long insert(User user) {
+    public long insert(RegisterUserDto user) {
         String sql = """
-                insert into "user" (user_full_name, user_email, user_login, user_password, user_karma)
-                values  (:fullName, :email, :login, :password, 0)
+                insert into "user" (user_full_name, user_email, user_login, user_password)
+                values  (:fullName, :email, :login, :password)
                 """;
         var params = new MapSqlParameterSource()
                 .addValue("fullName", user.getFullName())
@@ -64,28 +65,13 @@ public class UserRepository {
                 SELECT "user".user_id        AS id,
                        "user".user_email     AS email,
                        "user".user_full_name AS full_name,
-                       "user".user_login     AS login,
+                       "user".user_login     AS "login",
                        "user".user_karma     AS karma
                 FROM "user"
                 WHERE "user".user_login = ? AND "user".user_email = ?
                 """;
 
         return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, login, email)
-                .stream().findAny();
-    }
-
-    public Optional<User> findByLoginAndPassword(String login, String password) {
-        final String sql = """
-                SELECT "user".user_id        AS id,
-                       "user".user_email     AS email,
-                       "user".user_full_name AS full_name,
-                       "user".user_login     AS "login",
-                       "user".user_karma     AS karma
-                FROM "user"
-                WHERE "user".user_login = ? AND "user".user_password = ?
-                """;
-
-        return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, login, password)
                 .stream().findAny();
     }
 

@@ -28,8 +28,8 @@ public class ReportController {
     }
 
     @GetMapping("/reports")
-    public String getReports(Model model, HttpSession httpSession) {
-        if (!rightService.isUserAdmin(httpSession)) {
+    public String getReports(Model model, HttpSession session) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
@@ -40,10 +40,10 @@ public class ReportController {
     @GetMapping(value = "/reports/best-publications", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public Object exportBestPublicationsReport(Model model,
-                                               HttpSession httpSession,
+                                               HttpSession session,
                                                @RequestParam(required = false, defaultValue = "pdf") String reportFormat)
             throws JRException, IOException {
-        if (!rightService.isUserAdmin(httpSession)) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
@@ -53,10 +53,10 @@ public class ReportController {
     @GetMapping(value = "/reports/best-authors", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public Object exportBestAuthorsReport(Model model,
-                                          HttpSession httpSession,
+                                          HttpSession session,
                                           @RequestParam(required = false, defaultValue = "pdf") String reportFormat)
             throws JRException, IOException {
-        if (!rightService.isUserAdmin(httpSession)) {
+        if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }

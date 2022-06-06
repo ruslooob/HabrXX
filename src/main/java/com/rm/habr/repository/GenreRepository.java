@@ -23,7 +23,7 @@ public class GenreRepository {
 
     public List<Genre> findAll() {
         final String sql = """
-                SELECT genre.genre_id AS id, genre_name AS "name"
+                SELECT genre.genre_id, genre_name
                 FROM genre
                 """;
 

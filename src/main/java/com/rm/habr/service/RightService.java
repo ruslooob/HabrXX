@@ -15,17 +15,17 @@ public class RightService {
         this.userService = userService;
     }
 
-    public boolean isUserAdmin(HttpSession httpSession) {
-        if (!isUserAuthored(httpSession)) {
+    public boolean isUserAdmin(HttpSession session) {
+        if (!isUserAuthored(session)) {
             return false;
         }
 
-        return userService.isUserAdmin((Long) httpSession.getAttribute("userId"));
+        return userService.isUserAdmin((Long) session.getAttribute("userId"));
     }
 
     // todo что-то тут не чисто (сессию вроде бы не нужно проверять)
-    public boolean isUserAuthored(HttpSession httpSession) {
-        Long userId = (Long) (httpSession.getAttribute("userId") == null ? null : httpSession.getAttribute("userId"));
+    public boolean isUserAuthored(HttpSession session) {
+        Long userId = (Long) (session.getAttribute("userId") == null ? null : session.getAttribute("userId"));
         if (userId == null) {
             return false;
         }
