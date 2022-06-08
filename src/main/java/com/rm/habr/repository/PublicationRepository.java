@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Repository
 public class PublicationRepository {
+    public static final int PAGE_SIZE = 10;
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -67,7 +68,7 @@ public class PublicationRepository {
 
     private void addTag(long publicationId, long tagId) {
         final String sql = """
-                insert into public.marked (publication_id, tag_id)
+                insert into marked (publication_id, tag_id)
                 values  (:publicationId, :tagId)
                 """;
         var params = new MapSqlParameterSource()
@@ -104,6 +105,7 @@ public class PublicationRepository {
     }
 
     public Publications findPage(Integer page) {
+        //language=sql
         final String sql = """
                 SELECT "publication".publication_id,
                        publication_views_count,
@@ -119,16 +121,50 @@ public class PublicationRepository {
                 FROM "publication"
                          LEFT JOIN "user" on "user".user_id = "publication".user_id
                 ORDER BY publication_datetime DESC
-                limit 10
-                offset 10 * (?-1)
-                """;
+                limit %d
+                offset %d * (?-1)
+                """.formatted(PAGE_SIZE, PAGE_SIZE);
 
         var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), page);
         publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
 
-        return new Publications(publications, getRowsCount());
+        return new Publications(publications, getPublicationsCount());
+    }
+
+    public Publications findPageByGenreName(String genreName, Integer page) {
+        final String sql = """
+                SELECT "publication".publication_id,
+                       publication_views_count,
+                       publication_header,
+                       publication_preview_image_path,
+                       publication_content,
+                       publication_datetime,
+                       publication_karma,
+                       "user".user_id,
+                       user_login,
+                       user_email,
+                       user_karma
+                FROM "publication"
+                         LEFT JOIN "user" on "user".user_id = "publication".user_id
+                         INNER JOIN relates_to genres on "publication".publication_id = genres.publication_id
+                         INNER JOIN genre on genres.genre_id = genre.genre_id
+                WHERE genre.genre_name ilike ?
+                ORDER BY publication_datetime DESC
+                limit %d
+                offset %d * (? - 1)
+                """
+                .formatted(PAGE_SIZE, PAGE_SIZE);
+
+        var publications = jdbcTemplate.getJdbcTemplate()
+                .query(sql, new PublicationMapper(), genreName.equalsIgnoreCase("Все") ? true : genreName, page);
+
+        publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
+        publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
+        publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
+
+        return new Publications(publications, getPublicationsCountByGenre(genreName));
     }
 
     public Optional<Publication> findById(long id) {
@@ -223,77 +259,32 @@ public class PublicationRepository {
         return jdbcTemplate.getJdbcTemplate().query(sql, new TagMapper(), publicationId);
     }
 
-    public List<Publication> findAllByGenre(Long genreId) {
-        final String sql = """
-                SELECT "publication".publication_id,
-                       publication_views_count,
-                       publication_header,
-                       publication_preview_image_path,
-                       publication_content,
-                       publication_datetime,
-                       publication_karma,
-                       "user".user_id,
-                       user_login,
-                       user_email,
-                       user_karma
-                FROM "publication"
-                         LEFT JOIN "user" on "user".user_id = "publication".user_id
-                         INNER JOIN relates_to genres on "publication".publication_id = genres.publication_id
-                         INNER JOIN genre on genres.genre_id = genre.genre_id
-                WHERE genres.genre_id = ?
-                ORDER BY publication_datetime DESC
-                """;
-
-        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreId);
-
-        publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
-        publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
-        publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
-
-        return publications;
-    }
-
-    public Publications findPageByGenreName(String genreName, Integer page) {
-        final String sql = """
-                SELECT "publication".publication_id,
-                       publication_views_count,
-                       publication_header,
-                       publication_preview_image_path,
-                       publication_content,
-                       publication_datetime,
-                       publication_karma,
-                       "user".user_id,
-                       user_login,
-                       user_email,
-                       user_karma
-                FROM "publication"
-                         LEFT JOIN "user" on "user".user_id = "publication".user_id
-                         INNER JOIN relates_to genres on "publication".publication_id = genres.publication_id
-                         INNER JOIN genre on genres.genre_id = genre.genre_id
-                WHERE genre.genre_name ilike ?
-                ORDER BY publication_datetime DESC
-                limit 10
-                offset 10 * (? - 1)
-                """;
-
-        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), genreName, page);
-
-        publications.forEach(p -> p.setComments(commentRepository.findCommentsByPublicationId(p.getId())));
-        publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
-        publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
-
-
-        return new Publications(publications, getRowsCount());
-    }
-
-    public Integer getRowsCount() {
+    public Integer getPublicationsCount() {
         final String sql = """
                 select count(*) from "publication";
                 """;
         return jdbcTemplate.getJdbcTemplate().queryForObject(sql, (rs, rowNum) -> rs.getInt("count"));
     }
 
-    public List<Publication> findAllByUserId(Long userId) {
+    public Integer getPublicationsCountByGenre(String genreName) {
+        final String sql = """
+                select count(*) from "publication"
+                 inner join relates_to on relates_to.publication_id = "publication".publication_id
+                 inner join genre on genre.genre_id = relates_to.genre_id
+                 where genre.genre_name = ?;
+                """;
+        return jdbcTemplate.getJdbcTemplate().queryForObject(sql, (rs, rowNum) -> rs.getInt("count"), genreName);
+    }
+
+    public Integer getPublicationsCountByUser(Long userId) {
+        final var sql = """
+                select count(*)from "publication" where "publication".user_id = ?;
+                """;
+        return jdbcTemplate.getJdbcTemplate().queryForObject(sql, (rs, rowNum) -> rs.getInt("count"), userId);
+    }
+
+
+    public Publications findByUserId(Long userId, Integer page) {
 
         final String sql = """
                 SELECT "publication".publication_id,
@@ -313,14 +304,16 @@ public class PublicationRepository {
                          INNER JOIN genre on genres.genre_id = genre.genre_id
                 WHERE "publication".user_id = ?
                 ORDER BY publication_datetime DESC
-                """;
+                limit %d
+                offset %d * (? - 1)
+                """.formatted(PAGE_SIZE, PAGE_SIZE);
 
-        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), userId);
+        var publications = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), userId, page);
 
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
 
-        return publications;
+        return new Publications(publications, getPublicationsCountByUser(userId));
     }
 
     public void delete(long id) {
@@ -340,8 +333,8 @@ public class PublicationRepository {
                              inner join "user" on "user".user_id = "publication".user_id
                     group by user_login, "user".user_karma
                     order by count("publication".user_id) desc
-                    limit 10;
-                """;
+                    limit %d;
+                """.formatted(PAGE_SIZE);
 
         return jdbcTemplate.getJdbcTemplate().query(sql, new BestUserMapper());
 
@@ -361,10 +354,10 @@ public class PublicationRepository {
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user"  on "user".user_id = publication.user_id
+                         LEFT JOIN "user"  on "user".user_id = "publication".user_id
                 order by publication_karma desc
-                limit 10;
-                """;
+                limit %d;
+                """.formatted(PAGE_SIZE);
 
         return jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper());
     }

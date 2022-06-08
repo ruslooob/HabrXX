@@ -23,7 +23,7 @@ public class RightService {
         return userService.isUserAdmin((Long) session.getAttribute("userId"));
     }
 
-    // todo что-то тут не чисто (сессию вроде бы не нужно проверять)
+    /* todo разделить этот метод на 2 части, один проверяет, что у пользователя есть аккаунт, а торой проверяет сессию */
     public boolean isUserAuthored(HttpSession session) {
         Long userId = (Long) (session.getAttribute("userId") == null ? null : session.getAttribute("userId"));
         if (userId == null) {

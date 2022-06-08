@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Publications {
     /*тут хранятся не все записи, а только одна страница*/
-    List<Publication> publications;
+    private List<Publication> publications;
     /*кол-во записей во всей таблице (нужно для пагинации)*/
-    int rowsCount;
+    private int rowsCount;
 }

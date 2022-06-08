@@ -1,9 +1,7 @@
-<!--todo сделать, чтобы тематики вели на динамический урл (не критично)-->
 <div th:fragment="header" class="header__wrapper container-fluid">
     <header class="header container-1100">
         <a th:href="@{/}" class="header__logo" title="На главную">HabrXX</a>
         <div class="header__genres">
-            <!-- todo тут можно не по айдишникам, а по названию жанра-->
             <nav><a th:href="@{/publications?genre=Все}">Все</a></nav>
             <nav><a th:href="@{/publications?genre=Наука}">Наука</a></nav>
             <nav><a th:href="@{/publications?genre=Технологии}">Технологии</a></nav>

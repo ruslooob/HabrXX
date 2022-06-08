@@ -50,7 +50,7 @@ public class PublicationController {
     public String getAllPublications(Model model,
                                      @RequestParam(value = "genre", required = false, defaultValue = "Все") String genreName,
                                      @RequestParam(defaultValue = "1") Integer page) {
-        Publications publications = publicationService.findPageByGenreName(genreName, page);
+        Publications publications = publicationService.findByGenreName(genreName, page);
         model.addAttribute("publications", publications.getPublications());
         model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
         model.addAttribute("currentPage", page);
@@ -61,14 +61,19 @@ public class PublicationController {
     }
 
     @GetMapping("/byUser")
-    public String getAllPublicationsByUserId(Model model, @RequestParam Long userId) {
-        List<Publication> allByUserId = publicationService.findAllByUserId(userId);
+    public String getAllPublicationsByUser(Model model,
+                                           @RequestParam Long userId,
+                                           @RequestParam(defaultValue = "1") Integer page) {
+        Publications publications = publicationService.findByUserId(userId, page);
         User userById = userService.findUserById(userId);
-        model.addAttribute("publications", allByUserId);
+        model.addAttribute("publications", publications.getPublications());
         model.addAttribute("chosenFilter", userById.getLogin());
+        model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
+        model.addAttribute("currentPage", page);
+        List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
+        model.addAttribute("miniPublications", miniPublications);
         return "publications";
     }
-
 
     @GetMapping("/{id}")
     public String getPublication(@PathVariable long id, Model model, HttpSession session) {

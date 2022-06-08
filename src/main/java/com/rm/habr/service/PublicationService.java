@@ -24,10 +24,6 @@ public class PublicationService {
         return publicationRepository.findAll();
     }
 
-    public Publications findPage(Integer pageNumber) {
-        return publicationRepository.findPage(pageNumber);
-    }
-
     public Publication findById(Long id) {
         Optional<Publication> publication = publicationRepository.findById(id);
         return publication.orElseThrow();
@@ -73,15 +69,15 @@ public class PublicationService {
         publicationRepository.addLike(publicationId, userId);
     }
 
-    public Publications findPageByGenreName(String genreName, Integer page) {
+    public Publications findByGenreName(String genreName, Integer page) {
         if (genreName.equalsIgnoreCase("Все")) {
             return publicationRepository.findPage(page);
         }
         return publicationRepository.findPageByGenreName(genreName, page);
     }
 
-    public List<Publication> findAllByUserId(Long userId) {
-        return publicationRepository.findAllByUserId(userId);
+    public Publications findByUserId(Long userId, Integer page) {
+        return publicationRepository.findByUserId(userId, page);
     }
 
     public void delete(long id) {

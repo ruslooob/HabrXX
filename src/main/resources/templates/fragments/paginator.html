@@ -1,4 +1,4 @@
-<div class="paginator" th:fragment="paginator(currentPage, pagesCount)">
+<div class="paginator" th:hidden="${pagesCount == 1}" th:fragment="paginator(currentPage, pagesCount)">
     <a th:hidden="${currentPage == 1}"
        th:href="${'/publications?page=' + (currentPage - 1)}"
        th:title="${'Перейти на ' + (currentPage - 1) + ' страницу'}">
