@@ -12,16 +12,12 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Controller
+@RestController
 @RequestMapping("/publications")
 public class CommentController {
 
     private final CommentRepository commentRepository;
 
-    @Autowired
-    public CommentController(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
 
     @PostMapping("/{publicationId}/comments")
     public String createComment(@PathVariable long publicationId, @ModelAttribute CreateCommentDto comment, HttpSession session) {

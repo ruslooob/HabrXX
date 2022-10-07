@@ -20,7 +20,6 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-@Slf4j
 public class LoginController {
     private final UserService userService;
     private final RightService rightService;
