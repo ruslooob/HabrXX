@@ -86,13 +86,15 @@ public class PublicationRepository {
                        publication_preview_image_path,
                        publication_content,
                        publication_datetime,
-                       publication_karma,
-                       "user".user_id,
+                       (select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id) as publication_karma,
+                       "_user".user_id,
                        user_login,
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user" on "user".user_id = "publication".user_id
+                         LEFT JOIN "_user" on "_user".user_id = "publication".user_id
                 ORDER BY publication_datetime DESC
                 """;
 
@@ -113,13 +115,15 @@ public class PublicationRepository {
                        publication_preview_image_path,
                        publication_content,
                        publication_datetime,
-                       publication_karma,
-                       "user".user_id,
+                       (select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id) as publication_karma,
+                       "_user".user_id,
                        user_login,
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user" on "user".user_id = "publication".user_id
+                         LEFT JOIN "_user" on "_user".user_id = "publication".user_id
                 ORDER BY publication_datetime DESC
                 limit %d
                 offset %d * (?-1)
@@ -134,6 +138,7 @@ public class PublicationRepository {
     }
 
     public Publications findPageByGenreName(String genreName, Integer page) {
+        //language=sql
         final String sql = """
                 SELECT "publication".publication_id,
                        publication_views_count,
@@ -141,13 +146,15 @@ public class PublicationRepository {
                        publication_preview_image_path,
                        publication_content,
                        publication_datetime,
-                       publication_karma,
-                       "user".user_id,
+                       (select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id) as publication_karma,
+                       "_user".user_id,
                        user_login,
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user" on "user".user_id = "publication".user_id
+                         LEFT JOIN "_user" on "_user".user_id = "publication".user_id
                          INNER JOIN relates_to genres on "publication".publication_id = genres.publication_id
                          INNER JOIN genre on genres.genre_id = genre.genre_id
                 WHERE genre.genre_name ilike ?
@@ -174,14 +181,16 @@ public class PublicationRepository {
                        publication_header,
                        publication_content,
                        publication_datetime,
-                       publication_karma,
+                       (select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id) as publication_karma,
                        publication_preview_image_path,
-                       "user".user_id,
+                       "_user".user_id,
                        user_login,
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user"  on "user".user_id = "publication".user_id
+                         LEFT JOIN "_user"  on "_user".user_id = "publication".user_id
                 WHERE publication_id = ?
                 """;
         var publication = jdbcTemplate.getJdbcTemplate().query(sql, new PublicationMapper(), id)
@@ -293,13 +302,15 @@ public class PublicationRepository {
                        publication_preview_image_path,
                        publication_content,
                        publication_datetime,
-                       publication_karma,
-                       "user".user_id,
+                       (select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id) as publication_karma,
+                       "_user".user_id,
                        user_login,
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user" on "user".user_id = "publication".user_id
+                         LEFT JOIN "_user" on "_user".user_id = "publication".user_id
                          INNER JOIN relates_to genres on "publication".publication_id = genres.publication_id
                          INNER JOIN genre on genres.genre_id = genre.genre_id
                 WHERE "publication".user_id = ?
@@ -328,10 +339,10 @@ public class PublicationRepository {
         final String sql = """
                     select user_login,
                            count("publication".user_id),
-                           "user".user_karma
+                           "_user".user_karma
                     from "publication"
-                             inner join "user" on "user".user_id = "publication".user_id
-                    group by user_login, "user".user_karma
+                             inner join "_user" on "_user".user_id = "publication".user_id
+                    group by user_login, "_user".user_karma
                     order by count("publication".user_id) desc
                     limit %d;
                 """.formatted(PAGE_SIZE);
@@ -347,14 +358,16 @@ public class PublicationRepository {
                        publication_header,
                        publication_content,
                        publication_datetime,
-                       publication_karma,
+                       (select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id) as publication_karma,
                        publication_preview_image_path,
-                       "user".user_id,
+                       "_user".user_id,
                        user_login,
                        user_email,
                        user_karma
                 FROM "publication"
-                         LEFT JOIN "user"  on "user".user_id = "publication".user_id
+                         LEFT JOIN "_user"  on "_user".user_id = "publication".user_id
                 order by publication_karma desc
                 limit %d;
                 """.formatted(PAGE_SIZE);
@@ -369,7 +382,9 @@ public class PublicationRepository {
                        publication_views_count
                 from "publication"
                 where publication_datetime between now() - interval '7 days' and now()
-                order by (publication_karma, publication_views_count) desc
+                order by ((select count(*) 
+                       from upwoted_p 
+                       where upwoted_p.publication_id = publication.publication_id), publication_views_count) desc
                 limit 5;
                 """;
 

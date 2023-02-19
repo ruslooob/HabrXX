@@ -42,7 +42,7 @@ public class ReportService {
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(publications);
         Map<String, Object> params = new HashMap<>();
         JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, dataSource);
-        String fileName = "/home/ruslooob/Documents/reports/best_publications" + LocalDateTime.now();
+        String fileName = "C\\reports\\best_publications" + LocalDateTime.now();
 
         if (reportFormat.equalsIgnoreCase("html")) {
             fileName += ".html";
@@ -64,7 +64,9 @@ public class ReportService {
             throw new RuntimeException("Не верный формат отчета");
         }
         BufferedInputStream bs = new BufferedInputStream(new FileInputStream(fileName));
-        return bs.readAllBytes();
+        byte[] bytes = bs.readAllBytes();
+        bs.close();
+        return bytes;
     }
 
 
@@ -97,6 +99,8 @@ public class ReportService {
             throw new RuntimeException("Не верный формат отчета");
         }
         BufferedInputStream bs = new BufferedInputStream(new FileInputStream(fileName));
-        return bs.readAllBytes();
+        byte[] bytes = bs.readAllBytes();
+        bs.close();
+        return bytes;
     }
 }

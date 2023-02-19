@@ -82,7 +82,7 @@ public class PublicationController {
         publicationService.incrementViewsCount(id);
         //todo если пользователь не авторизовался, то вылетит ошибка throw not allowed instead 500
         if (session.getAttribute("userId") != null) {
-            boolean isLiked = publicationService.checkUserLikedPublication(id, (long) session.getAttribute("userId"));
+            boolean isLiked = publicationService.checkUserLikedPublication(id, (Long) session.getAttribute("userId"));
             model.addAttribute("isLike", isLiked);
         }
 

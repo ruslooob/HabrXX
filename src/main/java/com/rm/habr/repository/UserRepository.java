@@ -29,7 +29,7 @@ public class UserRepository {
 
     public long insert(RegisterUserDto user) {
         String sql = """
-                insert into "user" (user_email, user_login, user_password)
+                insert into _user (user_email, user_login, user_password)
                 values  (:email, :login, :password)
                 """;
         var params = new MapSqlParameterSource()
@@ -44,13 +44,13 @@ public class UserRepository {
 
     public Optional<User> findByLogin(String login) {
         final String sql = """
-                SELECT "user".user_id        AS id,
-                       "user".user_email     AS email,
-                       "user".user_login     AS "login",
-                       "user".user_password  AS "password",
-                       "user".user_karma     AS karma
-                FROM "user"
-                WHERE "user".user_login = ?
+                SELECT _user.user_id        AS id,
+                       _user.user_email     AS email,
+                       _user.user_login     AS "login",
+                       _user.user_password  AS "password",
+                       _user.user_karma     AS karma
+                FROM _user
+                WHERE _user.user_login = ?
                 """;
 
         return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, login)
@@ -60,12 +60,12 @@ public class UserRepository {
     @Deprecated(forRemoval = true)
     public Optional<User> findByLoginAndEmail(String login, String email) {
         final String sql = """
-                SELECT "user".user_id        AS id,
-                       "user".user_email     AS email,
-                       "user".user_login     AS "login",
-                       "user".user_karma     AS karma
-                FROM "user"
-                WHERE "user".user_login = ? AND "user".user_email = ?
+                SELECT _user.user_id        AS id,
+                       _user.user_email     AS email,
+                       _user.user_login     AS "login",
+                       _user.user_karma     AS karma
+                FROM _user
+                WHERE _user.user_login = ? AND _user.user_email = ?
                 """;
 
         return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, login, email)
@@ -74,12 +74,12 @@ public class UserRepository {
 
     public Optional<User> findById(long id) {
         final String sql = """
-                SELECT "user".user_id        AS id,
-                       "user".user_email     AS email,
-                       "user".user_login     AS "login",
-                       "user".user_karma     AS karma
-                FROM "user"
-                WHERE "user".user_id = ?
+                SELECT _user.user_id        AS id,
+                       _user.user_email     AS email,
+                       _user.user_login     AS "login",
+                       _user.user_karma     AS karma
+                FROM _user
+                WHERE _user.user_id = ?
                 """;
     /*избавиться от маппера*/
         return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, id)
@@ -102,7 +102,7 @@ public class UserRepository {
     public List<User> findAll() {
         final String sql = """
                 select user_id, user_email, user_login, user_karma
-                from "user";
+                from _user;
                 """;
         return jdbcTemplate.query(sql, new UserMapper());
     }
@@ -116,7 +116,7 @@ public class UserRepository {
 
     public void delete(Long userId) {
         final String sql = """
-                delete from "user" where user_id = ?
+                delete from _user where user_id = ?
                 """;
         jdbcTemplate.getJdbcTemplate().update(sql, userId);
     }

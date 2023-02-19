@@ -1,4 +1,4 @@
-insert into public.user (user_id, user_full_name, user_email, user_login, user_karma)
+insert into public._user (user_id, user_full_name, user_email, user_login, user_karma)
 values  (1, 'Мамедов Руслан Вагифович', 'rm952576@gmail.com', 'ruslooob', 0),
         (2, 'Алексеев Сергей Алексеевич', 'aserg@gmail.com', 'saphire', 0),
         (3, 'Пастухов Максим Михайлович', 'pamax@mail.com', 'maximus', 0),

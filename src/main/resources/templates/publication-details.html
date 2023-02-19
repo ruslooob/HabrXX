@@ -13,8 +13,8 @@
             window.location = "/"
         }
 
-        function addLike() {
-            let publicationId = document.getElementById("publicationId").textContent
+        function addLike(publicationId) {
+            // let publicationId = document.getElementById("publicationId").textContent
             fetch(`/publications/${publicationId}/likes`, {method: 'POST'})
             window.location.reload()
         }
@@ -53,7 +53,7 @@
                     <a th:if="${session.userId != null}" style="cursor:pointer;">
                         <img src="/svg/karma-solid.svg" alt=""
                              class="add-karma"
-                             onclick="addLike()"
+                             th:onclick="|addLike('${publication.id}')|"
                              title="Карма вверх!">
                     </a>
                     <img th:unless="${session.userId != null}" class="publication__karma-icon"

@@ -36,7 +36,7 @@ public class CommentRepository {
                        comment_datetime,
                        publication_header
                 from "comment"
-                         inner join "user" on "comment".user_id = "user".user_id
+                         inner join "_user" on "comment".user_id = "_user".user_id
                          inner join "publication" on "comment".publication_id = "publication".publication_id
                 """;
 
@@ -65,12 +65,12 @@ public class CommentRepository {
                        comment_content  AS "content",
                        comment_datetime AS "datetime",
                        comment_karma    AS karma,
-                       "user".user_id,
+                       "_user".user_id,
                        user_email,
                        user_login,
                        user_karma
                 FROM "comment"
-                    LEFT JOIN "user" on "user".user_id = "comment".user_id
+                    LEFT JOIN "_user" on "_user".user_id = "comment".user_id
                 WHERE publication_id = ?
                 """;
         return jdbcTemplate.getJdbcTemplate().query(sql, new CommentMapper(), publicationId);

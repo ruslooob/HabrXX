@@ -23,15 +23,3 @@ create index upwoted_3_fk
 
 create index upwoted_1_fk
     on public.upwoted_p (publication_id);
-
-create trigger upwoted_p_check
-    after insert
-    on public.upwoted_p
-    for each row
-execute procedure public.increment_publication_karma();
-
-create trigger upwoted_p_check
-    after insert
-    on public.upwoted_p
-    for each row
-execute procedure public.decrement_publication_karma();
