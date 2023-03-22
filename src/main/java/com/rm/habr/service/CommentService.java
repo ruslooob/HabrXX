@@ -1,7 +1,7 @@
 package com.rm.habr.service;
 
-
 import com.rm.habr.model.AdminComment;
+import com.rm.habr.model.Comment;
 import com.rm.habr.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +23,9 @@ public class CommentService {
 
     public void deleteById(Long commentId) {
         commentRepository.delete(commentId);
+    }
+
+    public List<Comment> findCommentsByPublicationId(long publicationId) {
+        return commentRepository.findCommentsByPublicationId(publicationId);
     }
 }

@@ -3,11 +3,7 @@ package com.rm.habr.controller;
 import com.rm.habr.dto.CreatePublicationDto;
 import com.rm.habr.dto.UpdatePublicationDto;
 import com.rm.habr.model.*;
-import com.rm.habr.repository.CommentRepository;
-import com.rm.habr.repository.GenreRepository;
-import com.rm.habr.repository.TagRepository;
-import com.rm.habr.service.PublicationService;
-import com.rm.habr.service.UserService;
+import com.rm.habr.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -30,19 +26,19 @@ import java.util.List;
 @RequestMapping("/publications")
 public class PublicationController {
     private final PublicationService publicationService;
-    private final CommentRepository commentRepository;
-    private final GenreRepository genreRepository;
-    private final TagRepository tagRepository;
+    private final CommentService commentService;
+    private final GenreService genreService;
+    private final TagService tagService;
     private final UserService userService;
 
     @Autowired
-    public PublicationController(PublicationService publicationService, CommentRepository commentRepository,
-                                 GenreRepository genreRepository, TagRepository tagRepository,
+    public PublicationController(PublicationService publicationService, CommentService commentService,
+                                 GenreService genreService, TagService tagService,
                                  UserService userService) {
         this.publicationService = publicationService;
-        this.commentRepository = commentRepository;
-        this.genreRepository = genreRepository;
-        this.tagRepository = tagRepository;
+        this.commentService = commentService;
+        this.genreService = genreService;
+        this.tagService = tagService;
         this.userService = userService;
     }
 
@@ -78,7 +74,7 @@ public class PublicationController {
     @GetMapping("/{id}")
     public String getPublication(@PathVariable long id, Model model, HttpSession session) {
         Publication publication = publicationService.findById(id);
-        List<Comment> comments = commentRepository.findCommentsByPublicationId(id);
+        List<Comment> comments = commentService.findCommentsByPublicationId(id);
         publicationService.incrementViewsCount(id);
         //todo если пользователь не авторизовался, то вылетит ошибка throw not allowed instead 500
         if (session.getAttribute("userId") != null) {
@@ -116,8 +112,8 @@ public class PublicationController {
         }
         // todo подумать, как тут избавиться от пустого конструктора
         model.addAttribute("publication", new CreatePublicationDto());
-        model.addAttribute("genres", genreRepository.findAll());
-        model.addAttribute("tags", tagRepository.findAll());
+        model.addAttribute("genres", genreService.findAll());
+        model.addAttribute("tags", tagService.findAll());
         return "publication-form";
     }
 
@@ -142,8 +138,8 @@ public class PublicationController {
             return "forbidden";
         }
         model.addAttribute("updatedPublication", UpdatePublicationDto.convert(publicationService.findById(id)));
-        model.addAttribute("genres", genreRepository.findAll());
-        model.addAttribute("tags", tagRepository.findAll());
+        model.addAttribute("genres", genreService.findAll());
+        model.addAttribute("tags", tagService.findAll());
         return "publication-update-form";
     }
 
