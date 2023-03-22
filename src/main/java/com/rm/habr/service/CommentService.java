@@ -5,6 +5,7 @@ import com.rm.habr.model.Comment;
 import com.rm.habr.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -25,7 +26,8 @@ public class CommentService {
         commentRepository.delete(commentId);
     }
 
-    public List<Comment> findCommentsByPublicationId(long publicationId) {
-        return commentRepository.findCommentsByPublicationId(publicationId);
+    public void findCommentsByPublicationId(long publicationId, Model model) {
+        List<Comment> comments = commentRepository.findCommentsByPublicationId(publicationId);
+        model.addAttribute("comments", comments);
     }
 }
