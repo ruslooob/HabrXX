@@ -1,36 +1,44 @@
 <div class="paginator" th:hidden="${pagesCount == 1}" th:fragment="paginator(currentPage, pagesCount)">
+    <!-- previous page -->
     <a th:hidden="${currentPage == 1}"
        th:href="${'/publications?page=' + (currentPage - 1)}"
        th:title="${'Перейти на ' + (currentPage - 1) + ' страницу'}">
         <
     </a>
+    <!-- first page -->
     <a th:hidden="${pagesCount == 1}"
-       th:text="${currentPage}"
-       th:href="${'/publications?page=' + currentPage}"
-       th:title="${'Перейти на ' + currentPage + ' страницу'}"
+       th:text="1"
+       th:href="${'/publications?page=' + 1}"
+       th:title="${'Перейти на ' + 1 + ' страницу'}"
     >
     </a>
+    <!-- second page -->
     <a th:hidden="${currentPage + 1 > pagesCount}"
-       th:href="${'/publications?page=' + (currentPage + 1)}"
-       th:text="${currentPage + 1}"
-       th:title="${'Перейти на ' + (currentPage + 1) + ' страницу'}">
+       th:href="${'/publications?page=' + 2}"
+       th:text="2"
+       th:title="${'Перейти на ' + 2 + ' страницу'}">
     </a>
+    <!-- third page -->
     <a th:hidden="${currentPage + 2 > pagesCount}"
-       th:href="${'/publications?page=' + (currentPage + 2)}"
-       th:text="currentPage + 2"
-       th:title="${'Перейти на ' + (currentPage + 2) + ' страницу'}">
+       th:href="${'/publications?page=' + 3}"
+       th:text="3"
+       th:title="${'Перейти на ' + 3 + ' страницу'}">
     </a>
+    <!-- separator -->
     <span th:hidden="${pagesCount < 5}" href="#">...</span>
+    <!-- pre last page -->
     <a th:hidden="${(pagesCount - 2) <= 2}"
        th:href="${'/publications?page=' + (pagesCount - 2)}"
        th:text="${(pagesCount - 2)}"
        th:title="${'Перейти на ' + (pagesCount - 2) + ' страницу'}">
     </a>
+    <!-- last page -->
     <a th:hidden="${(pagesCount - 1) <= 1}"
        th:href="${'/publications?page=' + (pagesCount - 1)}"
        th:text="${(pagesCount - 1)}"
        th:title="${'Перейти на ' + (pagesCount - 1) + ' страницу'}">
     </a>
+    <!-- next page -->
     <a th:hidden=" ${currentPage== pagesCount}"
        th:href="${'/publications?page=' + (currentPage + 1)}"
        th:title="${'Перейти на ' + (currentPage + 1) + ' страницу'}">
