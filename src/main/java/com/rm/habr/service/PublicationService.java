@@ -4,6 +4,7 @@ import com.rm.habr.dto.CreatePublicationDto;
 import com.rm.habr.model.*;
 import com.rm.habr.repository.PublicationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +14,13 @@ import java.util.Optional;
 public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final FileStorageService fileStorageService;
+    private final UserService userService;
 
     public PublicationService(PublicationRepository publicationRepository,
-                              FileStorageService fileStorageService) {
+                              FileStorageService fileStorageService, UserService userService) {
         this.publicationRepository = publicationRepository;
         this.fileStorageService = fileStorageService;
+        this.userService = userService;
     }
 
     public List<Publication> findAll() {
@@ -69,15 +72,28 @@ public class PublicationService {
         publicationRepository.addLike(publicationId, userId);
     }
 
-    public Publications findByGenreName(String genreName, Integer page) {
+    public void findByGenreName(String genreName, Integer page, Model model) {
+        Publications publications;
         if (genreName.equalsIgnoreCase("Все")) {
-            return publicationRepository.findPage(page);
+            publications = publicationRepository.findPage(page);
+        } else {
+            publications = publicationRepository.findPageByGenreName(genreName, page);
         }
-        return publicationRepository.findPageByGenreName(genreName, page);
+        model.addAttribute("publications", publications.getPublications());
+        model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("chosenFilter", genreName);
+        getBestMiniPublications(model);
     }
 
-    public Publications findByUserId(Long userId, Integer page) {
-        return publicationRepository.findByUserId(userId, page);
+    public void findByUserId(Long userId, Integer page, Model model) {
+        Publications publications = publicationRepository.findByUserId(userId, page);
+        model.addAttribute("publications", publications.getPublications());
+        model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
+        model.addAttribute("currentPage", page);
+        getBestMiniPublications(model);
+        User userById = userService.findUserById(userId);
+        model.addAttribute("chosenFilter", userById.getLogin());
     }
 
     public void delete(long id) {
@@ -94,7 +110,8 @@ public class PublicationService {
     }
 
 
-    public List<MiniPublication> getBestMiniPublications() {
-        return publicationRepository.getBestMiniPublications();
+    public void getBestMiniPublications(Model model) {
+        List<MiniPublication> miniPublications = publicationRepository.getBestMiniPublications();
+        model.addAttribute("miniPublications", miniPublications);
     }
 }
