@@ -3,7 +3,9 @@ package com.rm.habr.controller;
 import com.rm.habr.dto.CreatePublicationDto;
 import com.rm.habr.dto.UpdatePublicationDto;
 import com.rm.habr.model.Comment;
+import com.rm.habr.model.MiniPublication;
 import com.rm.habr.model.Publication;
+import com.rm.habr.model.PublicationsPage;
 import com.rm.habr.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -22,49 +25,33 @@ public class PublicationController {
     private final CommentService commentService;
     private final GenreService genreService;
     private final TagService tagService;
-    private final UserService userService;
     private final MarkdownService markdownService;
 
 
     @Autowired
     public PublicationController(PublicationService publicationService, CommentService commentService,
-                                 GenreService genreService, TagService tagService, MarkdownService markdownService,
-                                 UserService userService) {
+                                 GenreService genreService, TagService tagService, MarkdownService markdownService) {
         this.publicationService = publicationService;
         this.commentService = commentService;
         this.genreService = genreService;
         this.tagService = tagService;
-        this.userService = userService;
         this.markdownService = markdownService;
 
     }
 
-    @GetMapping//fixme вынести все в publicationService
+    @GetMapping
     public String getAllPublications(Model model,
                                      @RequestParam(value = "genre", required = false, defaultValue = "Все") String genreName,
                                      @RequestParam(defaultValue = "1") Integer page) {
-        PublicationsPage publicationsPage = publicationService.findByGenreName(genreName, page);
-        model.addAttribute("publications", publicationsPage.getPublications());
-        model.addAttribute("pagesCount", publicationsPage.getRowsCount() / 10 + 1);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("chosenFilter", genreName);
-        List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
-        model.addAttribute("miniPublications", miniPublications);
+        publicationService.findByGenreName(genreName, page, model);
         return "publications";
     }
 
-    @GetMapping("/byUser")//fixme вынести все в publicationSErvice
+    @GetMapping("/byUser")
     public String getAllPublicationsByUser(Model model,
                                            @RequestParam Long userId,
                                            @RequestParam(defaultValue = "1") Integer page) {
-        PublicationsPage publicationsPage = publicationService.findByUserId(userId, page);
-        User userById = userService.findUserById(userId);
-        model.addAttribute("publications", publicationsPage.getPublications());
-        model.addAttribute("chosenFilter", userById.getLogin());
-        model.addAttribute("pagesCount", publicationsPage.getRowsCount() / 11 + 1);
-        model.addAttribute("currentPage", page);
-        List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
-        model.addAttribute("miniPublications", miniPublications);
+        publicationService.findByUserId(userId, page, model);
         return "publications";
     }
 
@@ -100,8 +87,8 @@ public class PublicationController {
         }
         // todo подумать, как тут избавиться от пустого конструктора
         model.addAttribute("publication", new CreatePublicationDto());
-        model.addAttribute("genres", genreService.findAll());
-        model.addAttribute("tags", tagService.findAll());
+        genreService.findAll(model);
+        tagService.findAll(model);
         return "publication-form";
     }
 
@@ -119,15 +106,16 @@ public class PublicationController {
         return "redirect:/publications";
     }
 
-    @GetMapping("/update")//fixme засеттить в модель
+    @GetMapping("/update")
     public String showPublicationUpdateForm(Model model, @RequestParam long id, HttpSession session) {
         if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
         model.addAttribute("updatedPublication", UpdatePublicationDto.convert(publicationService.findById(id)));
-        model.addAttribute("genres", genreService.findAll());
-        model.addAttribute("tags", tagService.findAll());
+        // fixme подумать что лучше сеттание внутри метода поиска или лучше сделать метод чистым
+        genreService.findAll(model);
+        tagService.findAll(model);
         return "publication-update-form";
     }
 
