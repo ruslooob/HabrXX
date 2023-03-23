@@ -4,6 +4,7 @@ import com.rm.habr.model.Tag;
 import com.rm.habr.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public List<Tag> findAll() {
-        return tagRepository.findAll();
+    public void findAll(Model model) {
+        List<Tag> tags = tagRepository.findAll();
+        model.addAttribute("tags", tags);
     }
 }

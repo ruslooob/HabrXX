@@ -4,6 +4,7 @@ import com.rm.habr.model.Genre;
 import com.rm.habr.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class GenreService {
         this.genreRepository = genreRepository;
     }
 
-    public List<Genre> findAll() {
-        return genreRepository.findAll();
+    public void findAll(Model model) {
+        List<Genre> genres = genreRepository.findAll();
+        model.addAttribute("genres", genres);
     }
 }

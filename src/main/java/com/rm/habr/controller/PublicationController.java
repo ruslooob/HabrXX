@@ -2,16 +2,10 @@ package com.rm.habr.controller;
 
 import com.rm.habr.dto.CreatePublicationDto;
 import com.rm.habr.dto.UpdatePublicationDto;
-import com.rm.habr.model.*;
+import com.rm.habr.model.Comment;
+import com.rm.habr.model.Publication;
 import com.rm.habr.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.commonmark.Extension;
-import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
-import org.commonmark.ext.gfm.tables.TablesExtension;
-import org.commonmark.ext.ins.InsExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -30,19 +23,23 @@ public class PublicationController {
     private final GenreService genreService;
     private final TagService tagService;
     private final UserService userService;
+    private final MarkdownService markdownService;
+
 
     @Autowired
     public PublicationController(PublicationService publicationService, CommentService commentService,
-                                 GenreService genreService, TagService tagService,
+                                 GenreService genreService, TagService tagService, MarkdownService markdownService,
                                  UserService userService) {
         this.publicationService = publicationService;
         this.commentService = commentService;
         this.genreService = genreService;
         this.tagService = tagService;
         this.userService = userService;
+        this.markdownService = markdownService;
+
     }
 
-    @GetMapping
+    @GetMapping//fixme вынести все в publicationService
     public String getAllPublications(Model model,
                                      @RequestParam(value = "genre", required = false, defaultValue = "Все") String genreName,
                                      @RequestParam(defaultValue = "1") Integer page) {
@@ -56,7 +53,7 @@ public class PublicationController {
         return "publications";
     }
 
-    @GetMapping("/byUser")
+    @GetMapping("/byUser")//fixme вынести все в publicationSErvice
     public String getAllPublicationsByUser(Model model,
                                            @RequestParam Long userId,
                                            @RequestParam(defaultValue = "1") Integer page) {
@@ -71,40 +68,31 @@ public class PublicationController {
         return "publications";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")//fixme убрать сеттание в модель
     public String getPublication(@PathVariable long id, Model model, HttpSession session) {
         Publication publication = publicationService.findById(id);
-        List<Comment> comments = commentService.findCommentsByPublicationId(id);
+        commentService.findCommentsByPublicationId(id, model);
         publicationService.incrementViewsCount(id);
+
         //todo если пользователь не авторизовался, то вылетит ошибка throw not allowed instead 500
         if (session.getAttribute("userId") != null) {
             boolean isLiked = publicationService.checkUserLikedPublication(id, (Long) session.getAttribute("userId"));
             model.addAttribute("isLike", isLiked);
         }
 
-        /* todo вынести это в отдельный сервис MatrkDownService*/
         model.addAttribute("publication", publication);
-        List<Extension> extensions = List.of(
-                TablesExtension.create(),
-                StrikethroughExtension.create(),
-                InsExtension.create()
-        );
-        Parser parser = Parser.builder().extensions(extensions).build();
-        Node document = parser.parse(publication.getContent());
-        HtmlRenderer htmlRenderer = HtmlRenderer.builder().extensions(extensions).build();
-        model.addAttribute("htmlContent", htmlRenderer.render(document));
-        model.addAttribute("comments", comments);
+        markdownService.getHtmlContent(publication, model);
+        //fixme не сетить в модель
         model.addAttribute("newComment", new Comment());
+
         boolean isCanModify = (publication.getAuthor().getId().equals(session.getAttribute("userId")))
                 || (session.getAttribute("isAdmin") != null);
         model.addAttribute("isCanModify", isCanModify);
-
-        List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
-        model.addAttribute("miniPublications", miniPublications);
+        publicationService.getBestMiniPublications(model);
         return "publication-details";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/add")//fixme
     public String showPublicationForm(Model model, HttpSession session) {
         if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
@@ -131,7 +119,7 @@ public class PublicationController {
         return "redirect:/publications";
     }
 
-    @GetMapping("/update")
+    @GetMapping("/update")//fixme засеттить в модель
     public String showPublicationUpdateForm(Model model, @RequestParam long id, HttpSession session) {
         if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
