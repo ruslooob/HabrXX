@@ -36,7 +36,7 @@
                 <th>Название Публикации</th>
                 <th>Действие</th>
             </tr>
-            </thead><!-- todo в админке можно будет только удалять комментарии-->
+            </thead>
             <tbody>
             <tr class="admin-comment" th:each="comment: ${comments}">
                 <td class="comment-id" th:text="${comment.id}" style="display: none"></td>
@@ -52,6 +52,7 @@
             </tr>
             </tbody>
         </table>
+        <div th:replace="~{fragments/paginator(${currentPage}, ${pagesCount}, '/admin/comments')}"></div>
     </main>
     <footer th:replace="fragments/footer"></footer>
 </div>

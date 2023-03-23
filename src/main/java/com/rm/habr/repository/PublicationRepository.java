@@ -106,7 +106,7 @@ public class PublicationRepository {
         return publications;
     }
 
-    public Publications findPage(Integer page) {
+    public PublicationsPage findPage(Integer page) {
         //language=sql
         final String sql = """
                 SELECT "publication".publication_id,
@@ -134,10 +134,10 @@ public class PublicationRepository {
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
 
-        return new Publications(publications, getPublicationsCount());
+        return new PublicationsPage(publications, getPublicationsCount());
     }
 
-    public Publications findPageByGenreName(String genreName, Integer page) {
+    public PublicationsPage findPageByGenreName(String genreName, Integer page) {
         //language=sql
         final String sql = """
                 SELECT "publication".publication_id,
@@ -171,7 +171,7 @@ public class PublicationRepository {
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
 
-        return new Publications(publications, getPublicationsCountByGenre(genreName));
+        return new PublicationsPage(publications, getPublicationsCountByGenre(genreName));
     }
 
     public Optional<Publication> findById(long id) {
@@ -293,7 +293,7 @@ public class PublicationRepository {
     }
 
 
-    public Publications findByUserId(Long userId, Integer page) {
+    public PublicationsPage findByUserId(Long userId, Integer page) {
 
         final String sql = """
                 SELECT "publication".publication_id,
@@ -324,7 +324,7 @@ public class PublicationRepository {
         publications.forEach(p -> p.setGenres(findGenresByPublicationId(p.getId())));
         publications.forEach(p -> p.setTags(findTagsByPublicationId(p.getId())));
 
-        return new Publications(publications, getPublicationsCountByUser(userId));
+        return new PublicationsPage(publications, getPublicationsCountByUser(userId));
     }
 
     public void delete(long id) {

@@ -3,7 +3,9 @@ package com.rm.habr.controller;
 import com.rm.habr.dto.CreatePublicationDto;
 import com.rm.habr.dto.UpdatePublicationDto;
 import com.rm.habr.model.Comment;
+import com.rm.habr.model.MiniPublication;
 import com.rm.habr.model.Publication;
+import com.rm.habr.model.PublicationsPage;
 import com.rm.habr.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -24,6 +27,7 @@ public class PublicationController {
     private final TagService tagService;
     private final MarkdownService markdownService;
 
+
     @Autowired
     public PublicationController(PublicationService publicationService, CommentService commentService,
                                  GenreService genreService, TagService tagService, MarkdownService markdownService) {
@@ -32,6 +36,7 @@ public class PublicationController {
         this.genreService = genreService;
         this.tagService = tagService;
         this.markdownService = markdownService;
+
     }
 
     @GetMapping
@@ -50,7 +55,7 @@ public class PublicationController {
         return "publications";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")//fixme убрать сеттание в модель
     public String getPublication(@PathVariable long id, Model model, HttpSession session) {
         Publication publication = publicationService.findById(id);
         commentService.findCommentsByPublicationId(id, model);
@@ -64,7 +69,7 @@ public class PublicationController {
 
         model.addAttribute("publication", publication);
         markdownService.getHtmlContent(publication, model);
-
+        //fixme не сетить в модель
         model.addAttribute("newComment", new Comment());
 
         boolean isCanModify = (publication.getAuthor().getId().equals(session.getAttribute("userId")))
@@ -74,7 +79,7 @@ public class PublicationController {
         return "publication-details";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/add")//fixme
     public String showPublicationForm(Model model, HttpSession session) {
         if (session.getAttribute("userId") == null) {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
@@ -108,6 +113,7 @@ public class PublicationController {
             return "forbidden";
         }
         model.addAttribute("updatedPublication", UpdatePublicationDto.convert(publicationService.findById(id)));
+        // fixme подумать что лучше сеттание внутри метода поиска или лучше сделать метод чистым
         genreService.findAll(model);
         tagService.findAll(model);
         return "publication-update-form";

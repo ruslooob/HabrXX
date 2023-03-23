@@ -2,6 +2,7 @@ package com.rm.habr.controller.admin;
 
 import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
+import com.rm.habr.model.UsersPage;
 import com.rm.habr.service.RightService;
 import com.rm.habr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,16 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String getAllUsers(Model model, HttpSession session) {
+    public String getUsersPage(Model model, HttpSession session, @RequestParam(defaultValue = "1") Integer page) {
         if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
 
-        List<User> users = userService.findAllUsers();
-        model.addAttribute("users", users);
+        UsersPage usersPage = userService.getUsersPage(page);
+        model.addAttribute("users", usersPage.getUsers());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", usersPage.getRowsCount() / UsersPage.PAGE_SIZE + 1);
         return "admin/users";
     }
 
@@ -54,7 +57,8 @@ public class UserController {
                              BindingResult bindingResult,
                              @RequestParam(required = false) Boolean isAdmin,
                              HttpSession session,
-                             Model model) {
+                             Model model,
+                             @RequestParam(defaultValue = "1") Integer page) {
         if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
@@ -73,20 +77,27 @@ public class UserController {
             session.setAttribute("userId", userId);
             return "redirect:/users";
         }
-        List<User> users = userService.findAllUsers();
-        model.addAttribute("users", users);
+        UsersPage usersPage = userService.getUsersPage(page);
+        model.addAttribute("users", usersPage.getUsers());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", usersPage.getRowsCount() / UsersPage.PAGE_SIZE + 1);
         return "admin/users";
     }
 
     @DeleteMapping("/users/{userId}")
-    public String deleteUser(@PathVariable Long userId, HttpSession session, Model model) {
+    public String deleteUser(@PathVariable Long userId,
+                             HttpSession session,
+                             Model model,
+                             @RequestParam(defaultValue = "1") Integer page) {
         if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
         userService.delete(userId);
-        List<User> users = userService.findAllUsers();
-        model.addAttribute("users", users);
+        UsersPage usersPage = userService.getUsersPage(page);
+        model.addAttribute("users", usersPage.getUsers());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", usersPage.getRowsCount() / UsersPage.PAGE_SIZE + 1);
         return "admin/users";
     }
 }

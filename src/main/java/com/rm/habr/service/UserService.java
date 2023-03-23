@@ -3,6 +3,7 @@ package com.rm.habr.service;
 import com.rm.habr.dto.LoginUserDto;
 import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
+import com.rm.habr.model.UsersPage;
 import com.rm.habr.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,9 +73,11 @@ public class UserService {
         userRepository.saveAdmin(saveId);
     }
 
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public UsersPage getUsersPage(Integer page) {
+        return new UsersPage(userRepository.findPage(page), userRepository.getUsersCount());
     }
+
+
 
     public void delete(long userId) {
         userRepository.delete(userId);

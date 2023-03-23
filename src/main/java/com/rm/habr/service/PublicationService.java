@@ -23,8 +23,8 @@ public class PublicationService {
         this.userService = userService;
     }
 
-    public List<Publication> findAll() {
-        return publicationRepository.findAll();
+    public PublicationsPage findAllByPage(Integer page) {
+        return publicationRepository.findPage(page);
     }
 
     public Publication findById(Long id) {
@@ -73,7 +73,7 @@ public class PublicationService {
     }
 
     public void findByGenreName(String genreName, Integer page, Model model) {
-        Publications publications;
+        PublicationsPage publications;
         if (genreName.equalsIgnoreCase("Все")) {
             publications = publicationRepository.findPage(page);
         } else {
@@ -87,7 +87,7 @@ public class PublicationService {
     }
 
     public void findByUserId(Long userId, Integer page, Model model) {
-        Publications publications = publicationRepository.findByUserId(userId, page);
+        PublicationsPage publications = publicationRepository.findByUserId(userId, page);
         model.addAttribute("publications", publications.getPublications());
         model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
         model.addAttribute("currentPage", page);

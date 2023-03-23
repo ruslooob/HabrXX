@@ -1,19 +1,14 @@
 package com.rm.habr.controller.admin;
 
-import com.rm.habr.model.AdminComment;
-import com.rm.habr.repository.CommentRepository;
+import com.rm.habr.model.AdminCommentsPage;
 import com.rm.habr.service.CommentService;
 import com.rm.habr.service.RightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller("AdminCommentController")
 @RequestMapping("/admin")
@@ -28,26 +23,29 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public String getAllComments(Model model, HttpSession session) {
+    public String getCommentsPage(Model model, HttpSession session, @RequestParam(defaultValue = "1") Integer page) {
         if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
-
-        List<AdminComment> comments = commentService.getAllAdminComments();
-        model.addAttribute("comments", comments);
+        AdminCommentsPage commentsPage = commentService.getAllAdminComments(page);
+        model.addAttribute("comments", commentsPage.getComments());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", commentsPage.getRowsCount() / AdminCommentsPage.PAGE_SIZE + 1);
         return "admin/comments";
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public String deleteComment(@PathVariable Long commentId, HttpSession session, Model model) {
+    public String deleteComment(@PathVariable Long commentId, HttpSession session, Model model, @RequestParam(defaultValue = "1") Integer page) {
         if (!rightService.isUserAdmin(session)) {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
         commentService.deleteById(commentId);
-        List<AdminComment> comments = commentService.getAllAdminComments();
-        model.addAttribute("comments", comments);
+        AdminCommentsPage commentsPage = commentService.getAllAdminComments(page);
+        model.addAttribute("comments", commentsPage.getComments());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", commentsPage.getRowsCount() / AdminCommentsPage.PAGE_SIZE + 1);
         return "admin/comments";
     }
 }
