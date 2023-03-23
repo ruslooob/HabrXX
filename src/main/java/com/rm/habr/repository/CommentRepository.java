@@ -5,20 +5,17 @@ import com.rm.habr.model.AdminComment;
 import com.rm.habr.model.Comment;
 import com.rm.habr.repository.mapper.AdminCommentMapper;
 import com.rm.habr.repository.mapper.CommentMapper;
-import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public class CommentRepository {
-
+    private static final int PAGE_SIZE = 10;
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -27,7 +24,7 @@ public class CommentRepository {
     }
 
     /*todo перевести в admin comment repository*/
-    public List<AdminComment> findAllComments() {
+    public List<AdminComment> findAllComments(Integer page) {
         final String sql = """
                 select comment_id,
                        comment_content,
@@ -38,9 +35,11 @@ public class CommentRepository {
                 from "comment"
                          inner join "_user" on "comment".user_id = "_user".user_id
                          inner join "publication" on "comment".publication_id = "publication".publication_id
-                """;
+                limit %d
+                offset %d * (?-1)
+                """.formatted(PAGE_SIZE, PAGE_SIZE);
 
-        return jdbcTemplate.query(sql, new AdminCommentMapper());
+        return jdbcTemplate.getJdbcTemplate().query(sql, new AdminCommentMapper(), page);
     }
 
     public long insert(CreateCommentDto comment) {
@@ -81,6 +80,13 @@ public class CommentRepository {
                 DELETE FROM "comment" WHERE comment_id = ?
                 """;
         jdbcTemplate.getJdbcTemplate().update(sql, id);
+    }
+
+    public Integer getCommentsCount() {
+        final String sql = """
+                select count(*) from "comment";
+                """;
+        return jdbcTemplate.getJdbcTemplate().queryForObject(sql, (rs, rowNum) -> rs.getInt("count"));
     }
 
 }

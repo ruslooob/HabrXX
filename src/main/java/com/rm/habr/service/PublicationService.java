@@ -20,8 +20,8 @@ public class PublicationService {
         this.fileStorageService = fileStorageService;
     }
 
-    public List<Publication> findAll() {
-        return publicationRepository.findAll();
+    public PublicationsPage findAllByPage(Integer page) {
+        return publicationRepository.findPage(page);
     }
 
     public Publication findById(Long id) {
@@ -69,14 +69,14 @@ public class PublicationService {
         publicationRepository.addLike(publicationId, userId);
     }
 
-    public Publications findByGenreName(String genreName, Integer page) {
+    public PublicationsPage findByGenreName(String genreName, Integer page) {
         if (genreName.equalsIgnoreCase("Все")) {
             return publicationRepository.findPage(page);
         }
         return publicationRepository.findPageByGenreName(genreName, page);
     }
 
-    public Publications findByUserId(Long userId, Integer page) {
+    public PublicationsPage findByUserId(Long userId, Integer page) {
         return publicationRepository.findByUserId(userId, page);
     }
 

@@ -46,9 +46,9 @@ public class PublicationController {
     public String getAllPublications(Model model,
                                      @RequestParam(value = "genre", required = false, defaultValue = "Все") String genreName,
                                      @RequestParam(defaultValue = "1") Integer page) {
-        Publications publications = publicationService.findByGenreName(genreName, page);
-        model.addAttribute("publications", publications.getPublications());
-        model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
+        PublicationsPage publicationsPage = publicationService.findByGenreName(genreName, page);
+        model.addAttribute("publications", publicationsPage.getPublications());
+        model.addAttribute("pagesCount", publicationsPage.getRowsCount() / 10 + 1);
         model.addAttribute("currentPage", page);
         model.addAttribute("chosenFilter", genreName);
         List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
@@ -60,11 +60,11 @@ public class PublicationController {
     public String getAllPublicationsByUser(Model model,
                                            @RequestParam Long userId,
                                            @RequestParam(defaultValue = "1") Integer page) {
-        Publications publications = publicationService.findByUserId(userId, page);
+        PublicationsPage publicationsPage = publicationService.findByUserId(userId, page);
         User userById = userService.findUserById(userId);
-        model.addAttribute("publications", publications.getPublications());
+        model.addAttribute("publications", publicationsPage.getPublications());
         model.addAttribute("chosenFilter", userById.getLogin());
-        model.addAttribute("pagesCount", publications.getRowsCount() / 11 + 1);
+        model.addAttribute("pagesCount", publicationsPage.getRowsCount() / 11 + 1);
         model.addAttribute("currentPage", page);
         List<MiniPublication> miniPublications = publicationService.getBestMiniPublications();
         model.addAttribute("miniPublications", miniPublications);

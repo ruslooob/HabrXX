@@ -1,6 +1,6 @@
 create table public.comment
 (
-    comment_id       bigint         not null
+    comment_id       bigserial
         constraint pk_comment
             primary key,
     user_id          bigint
@@ -11,9 +11,9 @@ create table public.comment
         constraint fk_comment_consists__publicat
             references public.publication
             on update cascade on delete cascade,
-    comment_content  varchar(10000) not null,
-    comment_datetime date           not null,
-    comment_karma    integer        not null
+    comment_content  varchar(10000)        not null,
+    comment_datetime date    default now() not null,
+    comment_karma    integer default 0     not null
 );
 
 alter table public.comment

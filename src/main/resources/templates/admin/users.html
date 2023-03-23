@@ -45,6 +45,7 @@
             </tr>
             </tbody>
         </table>
+        <div th:replace="~{fragments/paginator(${currentPage}, ${pagesCount}, '/admin/users')}"></div>
     </main>
     <footer th:replace="fragments/footer"></footer>
 </div>

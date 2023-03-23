@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class Publications {
+public class PublicationsPage {
     /*тут хранятся не все записи, а только одна страница*/
     private List<Publication> publications;
     /*кол-во записей во всей таблице (нужно для пагинации)*/

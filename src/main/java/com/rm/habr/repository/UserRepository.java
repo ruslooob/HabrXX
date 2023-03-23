@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Repository
 public class UserRepository {
+    public static final int PAGE_SIZE = 10;
 
     private static final RowMapper<User> USER_ROW_MAPPER = JdbcTemplateMapperFactory.newInstance()
             .ignorePropertyNotFound()
@@ -81,7 +82,7 @@ public class UserRepository {
                 FROM _user
                 WHERE _user.user_id = ?
                 """;
-    /*избавиться от маппера*/
+        /*избавиться от маппера*/
         return jdbcTemplate.getJdbcTemplate().query(sql, USER_ROW_MAPPER, id)
                 .stream().findAny();
     }
@@ -99,12 +100,21 @@ public class UserRepository {
         return userId.isPresent();
     }
 
-    public List<User> findAll() {
+    public List<User> findPage(Integer page) {
         final String sql = """
                 select user_id, user_email, user_login, user_karma
-                from _user;
+                from _user
+                limit %d
+                offset %d * (?-1)
+                """.formatted(PAGE_SIZE, PAGE_SIZE);
+        return jdbcTemplate.getJdbcTemplate().query(sql, new UserMapper(), page);
+    }
+
+    public Integer getUsersCount() {
+        final String sql = """
+                select count(*) from "_user";
                 """;
-        return jdbcTemplate.query(sql, new UserMapper());
+        return jdbcTemplate.getJdbcTemplate().queryForObject(sql, (rs, rowNum) -> rs.getInt("count"));
     }
 
     public void saveAdmin(Long userId) {
