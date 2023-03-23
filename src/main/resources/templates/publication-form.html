@@ -10,14 +10,19 @@
     <div th:replace="~{fragments/header}"></div>
     <div class="create-form__wrapper container-1100">
         <h1 class="create-form__header">Создание публикации</h1>
-        <form class="form-create-publication" th:action="@{/publications}" th:object="${publication}" enctype="multipart/form-data" method="post">
+        <form class="form-create-publication"
+              th:action="@{/publications}"
+              th:object="${publication}"
+              enctype="multipart/form-data"
+              method="post"
+        >
             <div class="form-create-publication__header__wrapper">
                 <label>Заголовок</label><br>
                 <input class="form-create-publication__header" type="text" th:field="*{header}"/>
             </div>
             <div class="form-create-publication__file">
                 <label>Главное изображение</label><br>
-                <input name="file" type="file" value="Выберите изображение">
+                <input name="file" type="file" value="Выберите изображение" accept=".jpg,.png,.webp" max-size="1000000">
             </div>
             <div class="form-create-publication__content">
                 <label>Содержимое</label><br>
