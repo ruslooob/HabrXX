@@ -35,10 +35,7 @@ public class UserController {
             return "forbidden";
         }
 
-        UsersPage usersPage = userService.getUsersPage(page);
-        model.addAttribute("users", usersPage.getUsers());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pagesCount", usersPage.getRowsCount() / UsersPage.PAGE_SIZE + 1);
+        userService.fillGetUsersPageModel(page, model);
         return "admin/users";
     }
 
@@ -63,7 +60,7 @@ public class UserController {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
-        //todo сообщение об ошибках
+        //todo сообщение об ошибках и вынос в сервис
         Optional<String> validateSignUpMsg = userService.validateSignUp(user);
         if (validateSignUpMsg.isEmpty()) {
             if (isAdmin != null) {
@@ -77,10 +74,8 @@ public class UserController {
             session.setAttribute("userId", userId);
             return "redirect:/users";
         }
-        UsersPage usersPage = userService.getUsersPage(page);
-        model.addAttribute("users", usersPage.getUsers());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pagesCount", usersPage.getRowsCount() / UsersPage.PAGE_SIZE + 1);
+
+        userService.fillGetUsersPageModel(page, model);
         return "admin/users";
     }
 
@@ -94,10 +89,7 @@ public class UserController {
             return "forbidden";
         }
         userService.delete(userId);
-        UsersPage usersPage = userService.getUsersPage(page);
-        model.addAttribute("users", usersPage.getUsers());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pagesCount", usersPage.getRowsCount() / UsersPage.PAGE_SIZE + 1);
+        userService.fillGetUsersPageModel(page, model);
         return "admin/users";
     }
 }

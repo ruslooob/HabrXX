@@ -24,13 +24,19 @@ public class CommentService {
         return new AdminCommentsPage(comments, commentRepository.getCommentsCount());
     }
 
+    public void fillGetAllAdminCommentsModel(Integer page, Model model) {
+        AdminCommentsPage adminCommentsPage = getAllAdminComments(page);
+        model.addAttribute("comments", adminCommentsPage.getComments());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", adminCommentsPage.getRowsCount() / (AdminCommentsPage.PAGE_SIZE + 1) + 1);
+    }
+
     public void deleteById(Long commentId) {
         commentRepository.delete(commentId);
     }
 
-    public void findCommentsByPublicationId(long publicationId, Model model) {
-        List<Comment> comments = commentRepository.findCommentsByPublicationId(publicationId);
-        model.addAttribute("comments", comments);
+    public List<Comment> findCommentsByPublicationId(long publicationId) {
+        return commentRepository.findCommentsByPublicationId(publicationId);
     }
 
     public int getRowsCount() {

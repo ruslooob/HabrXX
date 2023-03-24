@@ -1,6 +1,5 @@
 package com.rm.habr.controller.admin;
 
-import com.rm.habr.model.AdminCommentsPage;
 import com.rm.habr.service.CommentService;
 import com.rm.habr.service.RightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,8 @@ public class CommentController {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
-        AdminCommentsPage commentsPage = commentService.getAllAdminComments(page);
-        model.addAttribute("comments", commentsPage.getComments());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pagesCount", commentsPage.getRowsCount() / AdminCommentsPage.PAGE_SIZE + 1);
+
+        commentService.fillGetAllAdminCommentsModel(page, model);
         return "admin/comments";
     }
 
@@ -41,11 +38,9 @@ public class CommentController {
             model.addAttribute("forbiddenMessage", "Вы не админ");
             return "forbidden";
         }
+
         commentService.deleteById(commentId);
-        AdminCommentsPage commentsPage = commentService.getAllAdminComments(page);
-        model.addAttribute("comments", commentsPage.getComments());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pagesCount", commentsPage.getRowsCount() / AdminCommentsPage.PAGE_SIZE + 1);
+        commentService.fillGetAllAdminCommentsModel(page, model);
         return "admin/comments";
     }
 }

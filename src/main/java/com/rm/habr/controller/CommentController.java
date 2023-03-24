@@ -25,6 +25,7 @@ public class CommentController {
 
     @PostMapping("/{publicationId}/comments")
     public String createComment(@PathVariable long publicationId, @ModelAttribute CreateCommentDto comment, HttpSession session) {
+        // todo add commentService
         comment.setPublicationId(publicationId);
         comment.setAuthor(new User((Long) session.getAttribute("userId")));
         commentRepository.insert(comment);

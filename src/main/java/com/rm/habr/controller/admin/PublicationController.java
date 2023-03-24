@@ -1,6 +1,5 @@
 package com.rm.habr.controller.admin;
 
-import com.rm.habr.model.PublicationsPage;
 import com.rm.habr.service.PublicationService;
 import com.rm.habr.service.RightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +30,7 @@ public class PublicationController {
             return "forbidden";
         }
 
-        PublicationsPage publicationsPage = publicationService.findAllByPage(page);
-        model.addAttribute("publications", publicationsPage.getPublications());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pagesCount", publicationsPage.getRowsCount() / 11 + 1);
+        publicationService.fillFindAllByPageModel(page, model);
         return "admin/publications";
     }
 }

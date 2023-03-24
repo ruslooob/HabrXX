@@ -2,11 +2,7 @@ package com.rm.habr.controller;
 
 import com.rm.habr.dto.CreatePublicationDto;
 import com.rm.habr.dto.UpdatePublicationDto;
-import com.rm.habr.model.Comment;
-import com.rm.habr.model.MiniPublication;
-import com.rm.habr.model.Publication;
-import com.rm.habr.model.PublicationsPage;
-import com.rm.habr.service.*;
+import com.rm.habr.service.PublicationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,27 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @Slf4j
 @RequestMapping("/publications")
 public class PublicationController {
     private final PublicationService publicationService;
-    private final CommentService commentService;
-    private final GenreService genreService;
-    private final TagService tagService;
-    private final MarkdownService markdownService;
 
 
     @Autowired
-    public PublicationController(PublicationService publicationService, CommentService commentService,
-                                 GenreService genreService, TagService tagService, MarkdownService markdownService) {
+    public PublicationController(PublicationService publicationService) {
         this.publicationService = publicationService;
-        this.commentService = commentService;
-        this.genreService = genreService;
-        this.tagService = tagService;
-        this.markdownService = markdownService;
 
     }
 
@@ -43,7 +29,7 @@ public class PublicationController {
     public String getAllPublications(Model model,
                                      @RequestParam(value = "genre", required = false, defaultValue = "Все") String genreName,
                                      @RequestParam(defaultValue = "1") Integer page) {
-        publicationService.findByGenreName(genreName, page, model);
+        publicationService.fillFindByGenreNameModel(genreName, page, model);
         return "publications";
     }
 
@@ -51,31 +37,19 @@ public class PublicationController {
     public String getAllPublicationsByUser(Model model,
                                            @RequestParam Long userId,
                                            @RequestParam(defaultValue = "1") Integer page) {
-        publicationService.findByUserId(userId, page, model);
+        publicationService.fillFindByUserIdModel(userId, page, model);
         return "publications";
     }
 
     @GetMapping("/{id}")//fixme убрать сеттание в модель
     public String getPublication(@PathVariable long id, Model model, HttpSession session) {
-        Publication publication = publicationService.findById(id);
-        commentService.findCommentsByPublicationId(id, model);
-        publicationService.incrementViewsCount(id);
-
         //todo если пользователь не авторизовался, то вылетит ошибка throw not allowed instead 500
         if (session.getAttribute("userId") != null) {
             boolean isLiked = publicationService.checkUserLikedPublication(id, (Long) session.getAttribute("userId"));
             model.addAttribute("isLike", isLiked);
         }
 
-        model.addAttribute("publication", publication);
-        markdownService.getHtmlContent(publication, model);
-        //fixme не сетить в модель
-        model.addAttribute("newComment", new Comment());
-
-        boolean isCanModify = (publication.getAuthor().getId().equals(session.getAttribute("userId")))
-                || (session.getAttribute("isAdmin") != null);
-        model.addAttribute("isCanModify", isCanModify);
-        publicationService.getBestMiniPublications(model);
+        publicationService.fillGetPublicationModel(id, session, model);
         return "publication-details";
     }
 
@@ -85,10 +59,8 @@ public class PublicationController {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
-        // todo подумать, как тут избавиться от пустого конструктора
-        model.addAttribute("publication", new CreatePublicationDto());
-        genreService.findAll(model);
-        tagService.findAll(model);
+        publicationService.fillShowPublicationFormModel(model);
+
         return "publication-form";
     }
 
@@ -112,10 +84,7 @@ public class PublicationController {
             model.addAttribute("forbiddenMessage", "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь и повторите попытку.");
             return "forbidden";
         }
-        model.addAttribute("updatedPublication", UpdatePublicationDto.convert(publicationService.findById(id)));
-        // fixme подумать что лучше сеттание внутри метода поиска или лучше сделать метод чистым
-        genreService.findAll(model);
-        tagService.findAll(model);
+        publicationService.fillShowUpdatePublicationFormModel(id, model);
         return "publication-update-form";
     }
 
@@ -134,15 +103,7 @@ public class PublicationController {
 
     @PostMapping("/{publicationId}/likes")
     public String addLikePublication(@PathVariable long publicationId, HttpSession session) {
-        long userId = (long) session.getAttribute("userId");
-        boolean isLikedByUser = publicationService.checkUserLikedPublication(publicationId, userId);
-
-        if (isLikedByUser) {
-            publicationService.deleteLike(publicationId, userId);
-        } else {
-            publicationService.addLike(publicationId, userId);
-        }
-
+        publicationService.toggleLike(publicationId, session);
         return "redirect:/publications/" + publicationId;
     }
 

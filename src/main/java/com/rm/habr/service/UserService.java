@@ -9,17 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 /*todo перенести методы отсюда в rightSErvice*/
 public class UserService {
-    Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    Logger log = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -30,7 +30,7 @@ public class UserService {
     public Optional<String> validateSignUp(RegisterUserDto user) {
         // check that user login, email does not repeat
         Optional<User> optionalUser = userRepository.findByLogin(user.getLogin());
-        if (optionalUser.isEmpty())  {
+        if (optionalUser.isEmpty()) {
             return Optional.of("Пользователь с таким логином уже существует!");
         }
         return Optional.empty();
@@ -77,6 +77,12 @@ public class UserService {
         return new UsersPage(userRepository.findPage(page), userRepository.getUsersCount());
     }
 
+    public void fillGetUsersPageModel(Integer page, Model model) {
+        UsersPage usersPage = getUsersPage(page);
+        model.addAttribute("users", usersPage.getUsers());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pagesCount", usersPage.getRowsCount() / (UsersPage.PAGE_SIZE + 1) + 1);
+    }
 
 
     public void delete(long userId) {

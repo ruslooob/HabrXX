@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class MarkdownService {
 
-    public void getHtmlContent(Publication publication, Model model) {
+    public String getHtmlContent(Publication publication) {
         List<Extension> extensions = List.of(
                 TablesExtension.create(),
                 StrikethroughExtension.create(),
@@ -25,6 +25,6 @@ public class MarkdownService {
         Parser parser = Parser.builder().extensions(extensions).build();
         Node document = parser.parse(publication.getContent());
         HtmlRenderer htmlRenderer = HtmlRenderer.builder().extensions(extensions).build();
-        model.addAttribute("htmlContent", htmlRenderer.render(document));
+        return htmlRenderer.render(document);
     }
 }

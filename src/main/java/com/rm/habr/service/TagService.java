@@ -18,8 +18,7 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public void findAll(Model model) {
-        List<Tag> tags = tagRepository.findAll();
-        model.addAttribute("tags", tags);
+    public List<Tag> findAll() {
+        return tagRepository.findAll();
     }
 }

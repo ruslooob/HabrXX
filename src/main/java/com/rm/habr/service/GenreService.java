@@ -18,8 +18,7 @@ public class GenreService {
         this.genreRepository = genreRepository;
     }
 
-    public void findAll(Model model) {
-        List<Genre> genres = genreRepository.findAll();
-        model.addAttribute("genres", genres);
+    public List<Genre> findAll() {
+        return genreRepository.findAll();
     }
 }
