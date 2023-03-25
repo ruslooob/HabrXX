@@ -16,7 +16,7 @@
             <div class="publications">
                 <!--todo сделать иконку автора -->
                 <div th:each="publication: ${publications}"
-                     th:insert="~{fragments/publication(${publication})}"
+                     th:insert="~{fragments/publication(${publication}, ${imageEndpoint})}"
                      th:remove="tag"
                      class="publication">
                 </div>

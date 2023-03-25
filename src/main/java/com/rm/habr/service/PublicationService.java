@@ -5,6 +5,7 @@ import com.rm.habr.dto.UpdatePublicationDto;
 import com.rm.habr.model.*;
 import com.rm.habr.repository.PublicationRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final FileStorageService fileStorageService;
@@ -55,6 +57,7 @@ public class PublicationService {
         model.addAttribute("isCanModify", isCanModify);
 
         model.addAttribute("miniPublications", getBestMiniPublications());
+        model.addAttribute("imageEndpoint", "http://localhost:8080/image");
     }
 
     public void fillShowPublicationFormModel(Model model) {
@@ -86,6 +89,7 @@ public class PublicationService {
         publication.setGenres(genres);
         String pathToSave = fileStorageService.save(publicationDto.previewImage);
         publication.setPreviewImagePath(pathToSave);
+        log.info("saved publication id={} previewImagePath={}", publication.getId(), publication.getPreviewImagePath());
         return publicationRepository.insert(publication);
     }
 
@@ -137,6 +141,7 @@ public class PublicationService {
         model.addAttribute("currentPage", page);
         model.addAttribute("chosenFilter", genreName);
         model.addAttribute("miniPublications", getBestMiniPublications());
+        model.addAttribute("imageEndpoint", "http://localhost:8080/image");
     }
 
     public PublicationsPage findByUserId(Long userId, Integer page) {

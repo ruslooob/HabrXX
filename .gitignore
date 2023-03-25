@@ -1,5 +1,6 @@
 /.idea
 **/resources/static/uploads
+/images
 node_modules
 HELP.md
 .gradle
@@ -39,3 +40,4 @@ out/
 
 ### VS Code ###
 .vscode/
+/pgdata

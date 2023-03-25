@@ -2,19 +2,17 @@ package com.rm.habr.config;
 
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.export.SimpleCsvExporterConfiguration;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleWriterExporterOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.File;
-
 @Configuration
 public class Config {
+    @Value("${file-storage-path}")
+    public String fileStoragePath;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -28,5 +26,9 @@ public class Config {
         configuration.setRecordDelimiter("\r\n");
         exporter.setConfiguration(configuration);
         return exporter;
+    }
+
+    public String getFileStoragePath() {
+        return fileStoragePath;
     }
 }
