@@ -1,11 +1,13 @@
 package com.rm.habr.service;
 
+import com.rm.habr.config.Config;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -18,8 +20,14 @@ import java.util.stream.Stream;
 
 @Service
 public class FileStorageService {
-    private final Path root = Paths.get("src/main/resources/static/uploads/");
+    private final Path root;
 
+    public FileStorageService(Config config) {
+        root = Paths.get(config.getFileStoragePath());
+    }
+
+    //todo проверить
+    @PostConstruct
     public void init() {
         try {
             Files.createDirectory(root);

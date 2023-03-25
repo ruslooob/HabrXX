@@ -42,7 +42,7 @@
             <!--    todo сделать красиво-->
             <h4 th:text="${'Жанры: ' + publication.getGenres()}"></h4>
             <div class="publication__preview-image-wrapper">
-                <img class="publication__preview-image" th:src="@{'/uploads/' + ${publication.previewImagePath}}"
+                <img class="publication__preview-image" th:src="@{'/images/' + ${publication.previewImagePath}}"
                      alt="">
             </div>
             <div th:utext="${htmlContent}"></div>
