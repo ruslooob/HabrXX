@@ -57,6 +57,7 @@ public class PublicationService {
         model.addAttribute("isCanModify", isCanModify);
 
         model.addAttribute("miniPublications", getBestMiniPublications());
+        model.addAttribute("imageEndpoint", "http://localhost:8080/image");
     }
 
     public void fillShowPublicationFormModel(Model model) {
@@ -140,6 +141,7 @@ public class PublicationService {
         model.addAttribute("currentPage", page);
         model.addAttribute("chosenFilter", genreName);
         model.addAttribute("miniPublications", getBestMiniPublications());
+        model.addAttribute("imageEndpoint", "http://localhost:8080/image");
     }
 
     public PublicationsPage findByUserId(Long userId, Integer page) {

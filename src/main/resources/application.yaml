@@ -30,3 +30,4 @@ server:
   port: 8080
 
 file-storage-path: '/app/images/'
+image-endpoint: 'http://localhost:8080/image'

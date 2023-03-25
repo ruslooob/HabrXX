@@ -26,16 +26,6 @@ public class FileStorageService {
         root = Paths.get(config.getFileStoragePath());
     }
 
-    //todo проверить
-    @PostConstruct
-    public void init() {
-        try {
-            Files.createDirectory(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
-        }
-    }
-
     public String save(MultipartFile file) {
         try {
             String fileName = UUID.randomUUID() + getFileExtensionWithDot(file.getOriginalFilename()).orElse("");

@@ -31,14 +31,14 @@ create table admin
 ---
 create table publication
 (
-    publication_id          bigserial                            not null primary key,
+    publication_id                 bigserial                            not null primary key,
 
-    user_id                 bigserial references _user (user_id) not null,
-    publication_views_count integer                                       default 0,
-    publication_header      varchar(100)                         not null,
-    publication_content     varchar(100000)                      not null,
-    publication_datetime    timestamp                            not null default now(),
-    publication_karma       integer                              not null default 0,
+    user_id                        bigserial references _user (user_id) not null,
+    publication_views_count        integer                                       default 0,
+    publication_header             varchar(100)                         not null,
+    publication_content            varchar(100000)                      not null,
+    publication_datetime           timestamp                            not null default now(),
+    publication_karma              integer                              not null default 0,
     publication_preview_image_path varchar(200)
 );
 
@@ -263,15 +263,18 @@ EXECUTE PROCEDURE check_pub_karma_less_views();
 
 ----
 insert into genre (genre_id, genre_name)
-values  (1, 'Наука'),
-        (2, 'Научпоп'),
-        (3, 'Технологии'),
-        (4, 'Математика'),
-        (6, 'Политика');
+values (1, 'Наука'),
+       (2, 'Научпоп'),
+       (3, 'Технологии'),
+       (4, 'Математика'),
+       (6, 'Политика');
 
 insert into tag (tag_id, tag_name)
-values  (1, 'Программирование'),
-        (2, 'Тестирование'),
-        (3, 'Quality Assurance'),
-        (4, 'Дизайн'),
-        (5, 'Маркетинг');
+values (1, 'Программирование'),
+       (2, 'Тестирование'),
+       (3, 'Quality Assurance'),
+       (4, 'Дизайн'),
+       (5, 'Маркетинг');
+
+insert into admin(user_id)
+        (select user_id from _user where user_login = 'ruslooob');
