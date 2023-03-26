@@ -23,11 +23,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
+    implementation 'org.springframework.security:spring-security-core:5.7.7'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.springframework.security:spring-security-core:5.7.1'
+
+    runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.simpleflatmapper:sfm-springjdbc:8.2.3'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.commonmark:commonmark:0.18.2'
@@ -36,7 +40,7 @@ dependencies {
     implementation 'org.commonmark:commonmark-ext-ins:0.18.2'
     implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.19.1'
     implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

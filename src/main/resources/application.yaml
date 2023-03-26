@@ -26,8 +26,14 @@ spring:
       max-file-size: '1000KB'
       max-request-size: '1000KB'
 
+  rabbitmq:
+    port: 5672
+    host: localhost
+
 server:
   port: 8080
 
-file-storage-path: '/app/images/'
+file-storage-path: 'E:\images'# '/app/images/'
 image-endpoint: 'http://localhost:8080/image'
+
+queue-name: user_registration_queue

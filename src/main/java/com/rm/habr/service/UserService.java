@@ -4,7 +4,11 @@ import com.rm.habr.dto.LoginUserDto;
 import com.rm.habr.dto.RegisterUserDto;
 import com.rm.habr.model.User;
 import com.rm.habr.model.UsersPage;
+import com.rm.habr.queue.RabbitSender;
+import com.rm.habr.queue.RegisteredUserMessage;
 import com.rm.habr.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,17 +19,13 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
+@Slf4j
 /*todo перенести методы отсюда в rightSErvice*/
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    Logger log = LoggerFactory.getLogger(UserService.class);
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
+    private final RabbitSender rabbitSender;
 
     public Optional<String> validateSignUp(RegisterUserDto user) {
         // check that user login, email does not repeat
@@ -65,7 +65,9 @@ public class UserService {
     public Long save(RegisterUserDto user) {
         String hashedPassword = hashPassword(user.getPassword());
         user.setPassword(hashedPassword);
-        return userRepository.insert(user);
+        long id = userRepository.insert(user);
+        rabbitSender.send(new RegisteredUserMessage(user.getEmail(), user.getLogin()));
+        return id;
     }
 
     public void saveAdmin(RegisterUserDto user) {
@@ -83,7 +85,6 @@ public class UserService {
         model.addAttribute("currentPage", page);
         model.addAttribute("pagesCount", usersPage.getRowsCount() / (UsersPage.PAGE_SIZE + 1) + 1);
     }
-
 
     public void delete(long userId) {
         userRepository.delete(userId);
